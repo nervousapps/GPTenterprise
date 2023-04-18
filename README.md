@@ -62,7 +62,7 @@ nano ./openai_key.txt
 
 
 ## :point_right: Quickstart v1
-To see an example of what can be done with the idea of GPTenterprise, tweek config file in order to give CEO guidelines (and other parameters if you want but default one should be ok), and run:
+To see an example of what can be done with the idea of GPTenterprise, tweek config file in order to give :superhero_man: CEO guidelines (and other parameters if you want but default one should be ok), and run:
 ```bash
 gpt_enterprise ./config
 ```
@@ -96,17 +96,19 @@ Task structure
     "todo":
     "type":
     "requirements": '("yes" or "no")'
-    "result":
 }
 ```
+At each task, the manager will add a result field with the employee's work.
 
 Plans structure
 ```python
 {
     "employees": [employee1, employee2],
-    "tasks": [task1, task2]
+    "tasks": [task1, task2],
 }
 ```
+
+The final product can be found in the final_product field of the json object contained in production file in the specified output directory.
 
 
 ### Environement variables (config file)
@@ -116,11 +118,20 @@ Plans structure
 | KEYFILE                        | Path to openai keyfile.txt                                            | ./openai_key.txt|
 | OUTPUT_DIRECTORY               | Output directory                                                      | ./generated/v2  |
 | MANAGER_RETRY                  | How many times manager will retry to do the plans if failing          | 1               |
-| CUSTOM_MANAGER_PROMPTS_PATH    | Give a custom manager prompt (be careful to keep objects definitions) | ""              |
+| CUSTOM_MANAGER_PROMPTS_PATH    | Give a custom manager prompt (be careful to keep objects structure definitions) | ""              |
 | CEO_GUIDELINES                 | "As a CEO, I want ..."                                         | "As a CEO, I want ..." |
+| INTERACTIVE                    | Wait for uer entry (basic for now)                                        | "no" |
 
 ## Tests
-Under construction
+1 - Install tests requirements
+```bash
+pip install -r ./python/requirements-tests.txt
+```
+
+2 - Run tests
+```bash
+pytest
+```
 
 ## Going further
 - rework manager prompt

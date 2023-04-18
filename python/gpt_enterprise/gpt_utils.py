@@ -11,12 +11,10 @@ EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), "employees_promp
 
 
 def generate_text(
-        system_prompt: str,
-        user_prompt: str,
-        model: str,
-        temperature: float) -> Generator:
+    system_prompt: str, user_prompt: str, model: str, temperature: float
+) -> Generator:
     """
-    
+
 
     Args:
         system_prompt (str): Initialize the system with the given system prompt
@@ -33,26 +31,24 @@ def generate_text(
             # Initialize GPT with system prompt
             {
                 "role": "system",
-                "content": system_prompt # + " Use less words as possible."
+                "content": system_prompt,  # + " Use less words as possible."
             },
             # Generate text relating to the user's prompt
-            {
-                "role": "user",
-                "content": user_prompt
-            }
+            {"role": "user", "content": user_prompt},
         ],
-        temperature=temperature
+        temperature=temperature,
     )
 
     return response
 
 
 def generate_image(
-        base_name: str,
-        user_prompt: str,
-        output_directory: str,
-        system_prompt: str = "",
-        nb_image: int = 1) -> Tuple[str, List[str]]:
+    base_name: str,
+    user_prompt: str,
+    output_directory: str,
+    system_prompt: str = "",
+    nb_image: int = 1,
+) -> Tuple[str, List[str]]:
     """
     Generate a prompt base on user_prompt and inject it to DALL-E
     to generate images.
@@ -75,14 +71,13 @@ def generate_image(
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {
                     "role": "system",
-                    "content": f"{file.read()}" + \
-                        f" You are also {system_prompt} But keep in mind that {file.read()}" if system_prompt else ""
+                    "content": f"{file.read()}"
+                    + f" You are also {system_prompt} But keep in mind that {file.read()}"
+                    if system_prompt
+                    else "",
                 },
                 # Generate a subject
-                {
-                    "role": "user",
-                    "content": f"SUBJECT {user_prompt}"
-                }
+                {"role": "user", "content": f"SUBJECT {user_prompt}"},
             ],
         )
 
@@ -97,12 +92,12 @@ def generate_image(
     generated_image_names = []
 
     # Download images
-    for index, image in enumerate(image_response['data']):
-        img_data = requests.get(image['url']).content
-        img_name = f'{base_name}_{index}.jpg'
+    for index, image in enumerate(image_response["data"]):
+        img_data = requests.get(image["url"]).content
+        img_name = f"{base_name}_{index}.jpg"
         img_path = os.path.join(output_directory, img_name)
-        with open(img_path, 'wb') as handler:
+        with open(img_path, "wb") as handler:
             handler.write(img_data)
             generated_image_names.append(f"./{img_name}")
 
-    return response.choices[0].message.content ,generated_image_names
+    return response.choices[0].message.content, generated_image_names

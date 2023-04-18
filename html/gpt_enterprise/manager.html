@@ -46,25 +46,31 @@ class Manager:
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     &#34;&#34;&#34;
-    def __init__(self, 
-                 ceo_guidelines: str, 
-                 manager_retry: int, 
-                 output_directory: str):
+
+    def __init__(self, ceo_guidelines: str, manager_retry: int, output_directory: str, interactive: bool = False):
         &#34;&#34;&#34;_summary_
 
         Args:
             ceo_guidelines (str): _description_
             manager_retry (int): _description_
             output_directory (str): _description_
-        &#34;&#34;&#34;        
+            interactive (bool): Defaults to False
+        &#34;&#34;&#34;
         with open(
             os.path.join(
-            MANAGER_PROMPTS_PATH if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;) else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
-            &#34;manager.txt&#34;), &#34;r&#34;) as file:
+                MANAGER_PROMPTS_PATH
+                if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;)
+                else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
+                &#34;manager.txt&#34;,
+            ),
+            &#34;r&#34;,
+        ) as file:
             self.role = file.read()
         self.ceo_guidelines = ceo_guidelines
         self.manager_retry = manager_retry
         self.output_directory = output_directory
+        self.interactive = interactive
+        self.emoji = &#34;\U0001F646&#34;
 
     def plans(self) -&gt; Dict:
         &#34;&#34;&#34;
@@ -80,14 +86,23 @@ class Manager:
                     system_prompt=self.role,
                     user_prompt=self.ceo_guidelines,
                     model=&#34;gpt-3.5-turbo&#34;,
-                    temperature=1.0
+                    temperature=1.0,
                 )
-                return ast.literal_eval(response.choices[0].message.content)
+                plan = ast.literal_eval(response.choices[0].message.content)
+                if self.interactive:
+                    if &#34;y&#34; in input(f&#34;\U0001F646 Is that plan good for you : {plan} ?&#34;).lower():
+                        return plan
+                    else:
+                        continue
+                else:
+                    return plan
             except Exception as err:
                 print(err)
-                print(f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;)
+                print(
+                    f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;
+                )
         print(&#34;\U0001F646 I&#39;ve messed up, I&#39;m not able to do this...&#34;)
-    
+
     def hire_employees(self, employees_to_hire: List[object]) -&gt; Dict:
         &#34;&#34;&#34;
         Hire the given employees
@@ -103,15 +118,9 @@ class Manager:
                 name=employee[&#34;name&#34;],
                 role_name=employee[&#34;role_name&#34;],
                 creativity=employee[&#34;creativity&#34;],
-                emoji=employee[&#34;emoji&#34;]
+                emoji=employee[&#34;emoji&#34;],
             )
-            try:
-                print(f&#34;{employee[&#39;emoji&#39;]}&#34;)
-            except Exception:
-                pass
-            print(f&#34;{employee[&#39;name&#39;]}&#34;)
         return hired_employees
-        
 
     def fire_employees(self, employees_to_fire: List[Employee]):
         &#34;&#34;&#34;
@@ -133,7 +142,7 @@ class Manager:
 
         Returns:
             Dict: Production of the team !
-        &#34;&#34;&#34;        
+        &#34;&#34;&#34;
         print(f&#34;\U0001F646 Hey, I&#39;m doing plan, just wait for the result !&#34;)
         employee_work = None
         for index, task in enumerate(tasks):
@@ -158,10 +167,18 @@ class Manager:
             #         temperature=1.0
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
+            if self.interactive:
+                if &#34;y&#34; not in input(
+                    f&#34;\U0001F646 Ask {task[&#39;employee&#39;]} to go on with the task \n {task} ?&#34;
+                ).lower():
+                    task[&#34;result&#34;] = employee_work
+                    continue
             if task[&#34;type&#34;] == &#34;image&#34;:
-                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
+                employee_work = employees[task[&#34;employee&#34;]].ask_image(
+                    task[&#34;todo&#34;], output_directory=self.output_directory
+                )
             if task[&#34;type&#34;] == &#34;text&#34;:
-                # Add the previous employee work to the current task to 
+                # Add the previous employee work to the current task to
                 # be used by the assigned employee.
                 if employee_work and &#34;yes&#34; in task[&#34;requirements&#34;]:
                     task[&#34;todo&#34;] = task[&#34;todo&#34;] + f&#34; PREVIOUS : {employee_work}&#34;
@@ -182,7 +199,7 @@ class Manager:
 <dl>
 <dt id="gpt_enterprise.manager.Manager"><code class="flex name class">
 <span>class <span class="ident">Manager</span></span>
-<span>(</span><span>ceo_guidelines: str, manager_retry: int, output_directory: str)</span>
+<span>(</span><span>ceo_guidelines: str, manager_retry: int, output_directory: str, interactive: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
@@ -196,6 +213,8 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
 <dd><em>description</em></dd>
 <dt><strong><code>output_directory</code></strong> :&ensp;<code>str</code></dt>
 <dd><em>description</em></dd>
+<dt><strong><code>interactive</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Defaults to False</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -206,25 +225,31 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     &#34;&#34;&#34;
-    def __init__(self, 
-                 ceo_guidelines: str, 
-                 manager_retry: int, 
-                 output_directory: str):
+
+    def __init__(self, ceo_guidelines: str, manager_retry: int, output_directory: str, interactive: bool = False):
         &#34;&#34;&#34;_summary_
 
         Args:
             ceo_guidelines (str): _description_
             manager_retry (int): _description_
             output_directory (str): _description_
-        &#34;&#34;&#34;        
+            interactive (bool): Defaults to False
+        &#34;&#34;&#34;
         with open(
             os.path.join(
-            MANAGER_PROMPTS_PATH if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;) else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
-            &#34;manager.txt&#34;), &#34;r&#34;) as file:
+                MANAGER_PROMPTS_PATH
+                if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;)
+                else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
+                &#34;manager.txt&#34;,
+            ),
+            &#34;r&#34;,
+        ) as file:
             self.role = file.read()
         self.ceo_guidelines = ceo_guidelines
         self.manager_retry = manager_retry
         self.output_directory = output_directory
+        self.interactive = interactive
+        self.emoji = &#34;\U0001F646&#34;
 
     def plans(self) -&gt; Dict:
         &#34;&#34;&#34;
@@ -240,14 +265,23 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
                     system_prompt=self.role,
                     user_prompt=self.ceo_guidelines,
                     model=&#34;gpt-3.5-turbo&#34;,
-                    temperature=1.0
+                    temperature=1.0,
                 )
-                return ast.literal_eval(response.choices[0].message.content)
+                plan = ast.literal_eval(response.choices[0].message.content)
+                if self.interactive:
+                    if &#34;y&#34; in input(f&#34;\U0001F646 Is that plan good for you : {plan} ?&#34;).lower():
+                        return plan
+                    else:
+                        continue
+                else:
+                    return plan
             except Exception as err:
                 print(err)
-                print(f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;)
+                print(
+                    f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;
+                )
         print(&#34;\U0001F646 I&#39;ve messed up, I&#39;m not able to do this...&#34;)
-    
+
     def hire_employees(self, employees_to_hire: List[object]) -&gt; Dict:
         &#34;&#34;&#34;
         Hire the given employees
@@ -263,15 +297,9 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
                 name=employee[&#34;name&#34;],
                 role_name=employee[&#34;role_name&#34;],
                 creativity=employee[&#34;creativity&#34;],
-                emoji=employee[&#34;emoji&#34;]
+                emoji=employee[&#34;emoji&#34;],
             )
-            try:
-                print(f&#34;{employee[&#39;emoji&#39;]}&#34;)
-            except Exception:
-                pass
-            print(f&#34;{employee[&#39;name&#39;]}&#34;)
         return hired_employees
-        
 
     def fire_employees(self, employees_to_fire: List[Employee]):
         &#34;&#34;&#34;
@@ -293,7 +321,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
 
         Returns:
             Dict: Production of the team !
-        &#34;&#34;&#34;        
+        &#34;&#34;&#34;
         print(f&#34;\U0001F646 Hey, I&#39;m doing plan, just wait for the result !&#34;)
         employee_work = None
         for index, task in enumerate(tasks):
@@ -318,10 +346,18 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
             #         temperature=1.0
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
+            if self.interactive:
+                if &#34;y&#34; not in input(
+                    f&#34;\U0001F646 Ask {task[&#39;employee&#39;]} to go on with the task \n {task} ?&#34;
+                ).lower():
+                    task[&#34;result&#34;] = employee_work
+                    continue
             if task[&#34;type&#34;] == &#34;image&#34;:
-                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
+                employee_work = employees[task[&#34;employee&#34;]].ask_image(
+                    task[&#34;todo&#34;], output_directory=self.output_directory
+                )
             if task[&#34;type&#34;] == &#34;text&#34;:
-                # Add the previous employee work to the current task to 
+                # Add the previous employee work to the current task to
                 # be used by the assigned employee.
                 if employee_work and &#34;yes&#34; in task[&#34;requirements&#34;]:
                     task[&#34;todo&#34;] = task[&#34;todo&#34;] + f&#34; PREVIOUS : {employee_work}&#34;
@@ -365,7 +401,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
 
     Returns:
         Dict: Production of the team !
-    &#34;&#34;&#34;        
+    &#34;&#34;&#34;
     print(f&#34;\U0001F646 Hey, I&#39;m doing plan, just wait for the result !&#34;)
     employee_work = None
     for index, task in enumerate(tasks):
@@ -390,10 +426,18 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
         #         temperature=1.0
         #     )
         #     task = ast.literal_eval(response.choices[0].message.content)
+        if self.interactive:
+            if &#34;y&#34; not in input(
+                f&#34;\U0001F646 Ask {task[&#39;employee&#39;]} to go on with the task \n {task} ?&#34;
+            ).lower():
+                task[&#34;result&#34;] = employee_work
+                continue
         if task[&#34;type&#34;] == &#34;image&#34;:
-            employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
+            employee_work = employees[task[&#34;employee&#34;]].ask_image(
+                task[&#34;todo&#34;], output_directory=self.output_directory
+            )
         if task[&#34;type&#34;] == &#34;text&#34;:
-            # Add the previous employee work to the current task to 
+            # Add the previous employee work to the current task to
             # be used by the assigned employee.
             if employee_work and &#34;yes&#34; in task[&#34;requirements&#34;]:
                 task[&#34;todo&#34;] = task[&#34;todo&#34;] + f&#34; PREVIOUS : {employee_work}&#34;
@@ -456,13 +500,8 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
             name=employee[&#34;name&#34;],
             role_name=employee[&#34;role_name&#34;],
             creativity=employee[&#34;creativity&#34;],
-            emoji=employee[&#34;emoji&#34;]
+            emoji=employee[&#34;emoji&#34;],
         )
-        try:
-            print(f&#34;{employee[&#39;emoji&#39;]}&#34;)
-        except Exception:
-            pass
-        print(f&#34;{employee[&#39;name&#39;]}&#34;)
     return hired_employees</code></pre>
 </details>
 </dd>
@@ -494,12 +533,21 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
                 system_prompt=self.role,
                 user_prompt=self.ceo_guidelines,
                 model=&#34;gpt-3.5-turbo&#34;,
-                temperature=1.0
+                temperature=1.0,
             )
-            return ast.literal_eval(response.choices[0].message.content)
+            plan = ast.literal_eval(response.choices[0].message.content)
+            if self.interactive:
+                if &#34;y&#34; in input(f&#34;\U0001F646 Is that plan good for you : {plan} ?&#34;).lower():
+                    return plan
+                else:
+                    continue
+            else:
+                return plan
         except Exception as err:
             print(err)
-            print(f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;)
+            print(
+                f&#34;\U0001F646 I&#39;ve messed up, retrying to plan tasks... {response.choices[0].message.content}&#34;
+            )
     print(&#34;\U0001F646 I&#39;ve messed up, I&#39;m not able to do this...&#34;)</code></pre>
 </details>
 </dd>

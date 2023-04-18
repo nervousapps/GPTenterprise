@@ -32,24 +32,25 @@ Employee
 &#34;&#34;&#34;
 from typing import List, Tuple
 
-from gpt_enterprise.gpt_utils import (
-    generate_text,
-    generate_image
-)
+from gpt_enterprise.gpt_utils import generate_text, generate_image
+
 
 class Employee:
     &#34;&#34;&#34;
     The Employee class represents an employee that act as the given system prompt.
     It can be used to do all you want, just tell him how to act.
     &#34;&#34;&#34;
-    def __init__(self,
-                 role_name: str,
-                 role_filename: str = None,
-                 role_prompt: str = None,
-                 name: str = &#34;GUY&#34;,
-                 emoji: str = &#34;\U0001F469&#34;,
-                 creativity: float = 1.0,
-                 gpt_version: str = &#34;gpt-3.5-turbo&#34;):
+
+    def __init__(
+        self,
+        role_name: str,
+        role_filename: str = None,
+        role_prompt: str = None,
+        name: str = &#34;GUY&#34;,
+        emoji: str = &#34;\U0001F469&#34;,
+        creativity: float = 1.0,
+        gpt_version: str = &#34;gpt-3.5-turbo&#34;,
+    ):
         &#34;&#34;&#34;
         Give your employee a role file for him to read it and act like you want.
 
@@ -69,7 +70,9 @@ class Employee:
         elif role_prompt:
             self.role = role_prompt
         else:
-            print(&#34;Your employee role prompt is not clear, please provide a role_filename or a role_prompt. He will just be a helpfull amployee.&#34;)
+            print(
+                &#34;Your employee role prompt is not clear, please provide a role_filename or a role_prompt. He will just be a helpfull amployee.&#34;
+            )
             self.role = &#34;You are a helpfull employee.&#34;
         self.role_name = role_name
         if not role_name:
@@ -77,9 +80,10 @@ class Employee:
         self.name = name
         self.emoji = emoji
         try:
-            print(f&#34;{self.emoji}&#34;)
+            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
         except Exception:
             self.emoji = &#34;\U0001F469&#34;
+            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
         self.creativity = creativity
         self.gpt_version = gpt_version
 
@@ -99,15 +103,23 @@ class Employee:
                 system_prompt=self.role,
                 user_prompt=manager_request,
                 model=self.gpt_version,
-                temperature=self.creativity
+                temperature=self.creativity,
             )
             response = response.choices[0].message.content
         except Exception as err:
             print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-        print(f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;)
+        print(
+            f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+        )
         return response
-    
-    def ask_image(self, manager_request: str, output_directory:str, base_name: str = &#34;img&#34;, nb_image: int = 1) -&gt; Tuple[str, List[str]]:
+
+    def ask_image(
+        self,
+        manager_request: str,
+        output_directory: str,
+        base_name: str = &#34;img&#34;,
+        nb_image: int = 1,
+    ) -&gt; Tuple[str, List[str]]:
         &#34;&#34;&#34;
         Ask the employee to create an image with the specified manager request.
         The employee will generate a prompt and ask DALL-E to generate the specified number of images.
@@ -120,20 +132,22 @@ class Employee:
 
         Returns:
             Tuple[str, List[str]]: The generated prompt and list of images paths
-        &#34;&#34;&#34;       
-        prompt = &#34;&#34;,
+        &#34;&#34;&#34;
+        prompt = (&#34;&#34;,)
         image_paths = []
-        try:     
+        try:
             prompt, image_paths = generate_image(
                 system_prompt=self.role,
                 base_name=base_name,
                 user_prompt=manager_request,
                 output_directory=output_directory,
-                nb_image=nb_image
+                nb_image=nb_image,
             )
         except Exception as err:
             print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-        print(f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;)
+        print(
+            f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+        )
         return prompt, image_paths</code></pre>
 </details>
 </section>
@@ -179,14 +193,17 @@ It can be used to do all you want, just tell him how to act.</p>
     The Employee class represents an employee that act as the given system prompt.
     It can be used to do all you want, just tell him how to act.
     &#34;&#34;&#34;
-    def __init__(self,
-                 role_name: str,
-                 role_filename: str = None,
-                 role_prompt: str = None,
-                 name: str = &#34;GUY&#34;,
-                 emoji: str = &#34;\U0001F469&#34;,
-                 creativity: float = 1.0,
-                 gpt_version: str = &#34;gpt-3.5-turbo&#34;):
+
+    def __init__(
+        self,
+        role_name: str,
+        role_filename: str = None,
+        role_prompt: str = None,
+        name: str = &#34;GUY&#34;,
+        emoji: str = &#34;\U0001F469&#34;,
+        creativity: float = 1.0,
+        gpt_version: str = &#34;gpt-3.5-turbo&#34;,
+    ):
         &#34;&#34;&#34;
         Give your employee a role file for him to read it and act like you want.
 
@@ -206,7 +223,9 @@ It can be used to do all you want, just tell him how to act.</p>
         elif role_prompt:
             self.role = role_prompt
         else:
-            print(&#34;Your employee role prompt is not clear, please provide a role_filename or a role_prompt. He will just be a helpfull amployee.&#34;)
+            print(
+                &#34;Your employee role prompt is not clear, please provide a role_filename or a role_prompt. He will just be a helpfull amployee.&#34;
+            )
             self.role = &#34;You are a helpfull employee.&#34;
         self.role_name = role_name
         if not role_name:
@@ -214,9 +233,10 @@ It can be used to do all you want, just tell him how to act.</p>
         self.name = name
         self.emoji = emoji
         try:
-            print(f&#34;{self.emoji}&#34;)
+            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
         except Exception:
             self.emoji = &#34;\U0001F469&#34;
+            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
         self.creativity = creativity
         self.gpt_version = gpt_version
 
@@ -236,15 +256,23 @@ It can be used to do all you want, just tell him how to act.</p>
                 system_prompt=self.role,
                 user_prompt=manager_request,
                 model=self.gpt_version,
-                temperature=self.creativity
+                temperature=self.creativity,
             )
             response = response.choices[0].message.content
         except Exception as err:
             print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-        print(f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;)
+        print(
+            f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+        )
         return response
-    
-    def ask_image(self, manager_request: str, output_directory:str, base_name: str = &#34;img&#34;, nb_image: int = 1) -&gt; Tuple[str, List[str]]:
+
+    def ask_image(
+        self,
+        manager_request: str,
+        output_directory: str,
+        base_name: str = &#34;img&#34;,
+        nb_image: int = 1,
+    ) -&gt; Tuple[str, List[str]]:
         &#34;&#34;&#34;
         Ask the employee to create an image with the specified manager request.
         The employee will generate a prompt and ask DALL-E to generate the specified number of images.
@@ -257,20 +285,22 @@ It can be used to do all you want, just tell him how to act.</p>
 
         Returns:
             Tuple[str, List[str]]: The generated prompt and list of images paths
-        &#34;&#34;&#34;       
-        prompt = &#34;&#34;,
+        &#34;&#34;&#34;
+        prompt = (&#34;&#34;,)
         image_paths = []
-        try:     
+        try:
             prompt, image_paths = generate_image(
                 system_prompt=self.role,
                 base_name=base_name,
                 user_prompt=manager_request,
                 output_directory=output_directory,
-                nb_image=nb_image
+                nb_image=nb_image,
             )
         except Exception as err:
             print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-        print(f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;)
+        print(
+            f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+        )
         return prompt, image_paths</code></pre>
 </details>
 <h3>Methods</h3>
@@ -301,7 +331,13 @@ The employee will generate a prompt and ask DALL-E to generate the specified num
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def ask_image(self, manager_request: str, output_directory:str, base_name: str = &#34;img&#34;, nb_image: int = 1) -&gt; Tuple[str, List[str]]:
+<pre><code class="python">def ask_image(
+    self,
+    manager_request: str,
+    output_directory: str,
+    base_name: str = &#34;img&#34;,
+    nb_image: int = 1,
+) -&gt; Tuple[str, List[str]]:
     &#34;&#34;&#34;
     Ask the employee to create an image with the specified manager request.
     The employee will generate a prompt and ask DALL-E to generate the specified number of images.
@@ -314,20 +350,22 @@ The employee will generate a prompt and ask DALL-E to generate the specified num
 
     Returns:
         Tuple[str, List[str]]: The generated prompt and list of images paths
-    &#34;&#34;&#34;       
-    prompt = &#34;&#34;,
+    &#34;&#34;&#34;
+    prompt = (&#34;&#34;,)
     image_paths = []
-    try:     
+    try:
         prompt, image_paths = generate_image(
             system_prompt=self.role,
             base_name=base_name,
             user_prompt=manager_request,
             output_directory=output_directory,
-            nb_image=nb_image
+            nb_image=nb_image,
         )
     except Exception as err:
         print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-    print(f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;)
+    print(
+        f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+    )
     return prompt, image_paths</code></pre>
 </details>
 </dd>
@@ -366,12 +404,14 @@ The employee will generate a prompt and ask DALL-E to generate the specified num
             system_prompt=self.role,
             user_prompt=manager_request,
             model=self.gpt_version,
-            temperature=self.creativity
+            temperature=self.creativity,
         )
         response = response.choices[0].message.content
     except Exception as err:
         print(f&#34;{self.emoji} {self.name}: {err}&#34;)
-    print(f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;)
+    print(
+        f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+    )
     return response</code></pre>
 </details>
 </dd>
