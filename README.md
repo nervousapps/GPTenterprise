@@ -1,12 +1,25 @@
-# GPTenterprise :zzz: :robot:
+<h1 align="center">
+GPTenterprise :zzz: :robot:
+<img width="200" src="./logo.png" alt="GPTenterprise">
+</h1>
 
 [![python](https://img.shields.io/badge/Python-3.7-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![openai](https://img.shields.io/badge/openai%20-GPT-yellowgreen)](https://www.openai.com)
+[![pytest](https://img.shields.io/badge/pytest%20-%20-green)](https://img.shields.io/badge)
 
-
-
-First try on making an enterprise with OpenaAI GPT.
+First try on emulating an enterprise with OpenaAI GPT.
 
 This is basically python utilities to connect to OpenaAI API and generate content with variety of system prompts to tell GPT what employee to be :brain:.
+
+## :artificial_satellite: About the enterprise (by GPT)
+<p>Our innovative company uses advanced artificial intelligence technology to bring products and services to the next level. Our employees are AI instances created with the powerful GPT language model that can perform various roles like engineers, designers, and even marketers. This enables us to develop products faster and more efficiently than traditional companies while also providing a unique experience for our customers.</p>
+		
+		
+<p>Our AI employees are equipped with the latest technology and are constantly learning and adapting to new situations. This allows us to be more agile and responsive to market changes, ensuring that our products and services are always at the forefront of innovation.</p>
+		
+<p>If you're interested in experiencing the future of AI technology, check out our product.</p>
+
+<p>Disclaimer: Our AI employees are not intended to replace human workers and are designed to be used as a supplement to human teams. We believe in the power of human creativity and intelligence when combined with advanced technology.</p>
 
 ## :pinched_fingers: Requirements
 
@@ -20,19 +33,102 @@ And enable it
 ```bash
 source ./gptenterprise/bin/activate
 ```
-- Install dependencies by executing:
+
+## :surfing_woman: Installation
+1 - Clone this repository
 ```bash
-pip install -r python/requirements.txt
+git clone https://github.com/nervousapps/GPTenterprise.git
 ```
 
-- Text file called openai_key.txt with your opanai key.
+2 - Go in the repo directory
+```bash
+cd GPTenterprise
+```
+
+3- Install GPTenterprise package and dependencies by executing:
+```bash
+pip install ./python
+```
+
+## :unicorn: OpenAI key configuration
+- Fill openai_key.txt.template with your opanai key and rename it to openai_key.txt. Or create a new one using:
 ```bash
 nano python/gpt_enterprise/openai_key.txt
 ```
 
 
+## :point_right: Quickstart v1
+To see an example of what can be done with the idea of GPTenterprise, tweek config file in order to give CEO guidelines (and other parameters if you want but default one should be ok), and run:
+```bash
+gpt_enterprise ./config
+```
 
-## :point_right: Quickstart
+Then the enterprise will be created with your guidelines and a manager will be hired. He will do his best to achieve guidelines.
+The manager will make a plan, with all employees to hire and the sequences of tasks that will be executed to produce the wondered result.
+
+## Documentation
+
+<iframe  frameborder="0" 
+    style=" width: 100%; height: 110%;" src="./html/gpt_enterprise/index.html">
+</iframe>
+
+Manager prompts defines the object structure for employees, tasks and global object. These structures must not be changed as they are used in the code.
+
+Employee structure
+```python
+{
+    "name": "Employee's name",
+    "role_name": "Employee's role name",
+    "role": "Employee's role (system prompt)"
+    "creativity": 1.0
+    "emoji": "Emoji code"
+}
+```
+Name and role_name must be unique.
+
+Task structure
+```python
+{
+    "task_name":
+    "employee":
+    "todo":
+    "type":
+    "requirements": '("yes" or "no")'
+    "result":
+}
+```
+
+Plans structure
+```python
+{
+    "employees": [employee1, employee2],
+    "tasks": [task1, task2]
+}
+```
+
+
+### Environement variables (config file)
+| env name                       | description     | default value      |
+| -------------------------------| ----------------| -------------------|
+| COMPANY_NAME                   | Enterprise name                                                       | GPTenterprise   | 
+| KEYFILE                        | Path to openai keyfile.txt                                            | ./openai_key.txt|
+| OUTPUT_DIRECTORY               | Output directory                                                      | ./generated/v2  |
+| MANAGER_RETRY                  | How many times manager will retry to do the plans if failing          | 1               |
+| CUSTOM_MANAGER_PROMPTS_PATH    | Give a custom manager prompt (be careful to keep objects definitions) | ""              |
+| CEO_GUIDELINES                 | "As a CEO, I want ..."                                         | "As a CEO, I want ..." |
+
+## Tests
+Under construction
+
+## Going further
+- [] rework manager prompt
+- [] employees interactions with each other
+- [] asynchronous operations
+- [] keep previous responses in memory
+
+
+## Miscelleneous
+### :old_man: Quickstart POC
 
 To see an example of what can be done with the idea of GPTenterprise, let use the webgpt.py
 
@@ -42,13 +138,13 @@ It is composed of several GPT employees (prompts):
     
 - :writing_hand: a subject prompter, that is responsible of formulating subjects.
 
-- :camera_flash: a dall-e prompter, that is responsible of generating prompts to inject to dall-e for generatig images on the previously generated sibject.
+- :camera_flash: a dall-e prompter, that is responsible of generating prompts to inject to dall-e for generating images on the previously generated sibject.
 
-- :desktop_computer: a web developer, that is responsible coding the website on previously generated subject and images.
+- :desktop_computer: a web developer, that is responsible of coding the website on previously generated subject and images.
 
 - :superhero_man: a CEO (you), that is responsible of driving all of this and run the enterprise.
 
 To run the enterprise please do:
 ```bash
-python ./python/gpt_enterprise/webgpt.py
+python ./examples/webgpt.py
 ```
