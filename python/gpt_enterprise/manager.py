@@ -17,25 +17,31 @@ class Manager:
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     """
-    def __init__(self, 
-                 ceo_guidelines: str, 
-                 manager_retry: int, 
-                 output_directory: str):
+
+    def __init__(self, ceo_guidelines: str, manager_retry: int, output_directory: str, interactive: bool = False):
         """_summary_
 
         Args:
             ceo_guidelines (str): _description_
             manager_retry (int): _description_
             output_directory (str): _description_
-        """        
+            interactive (bool): Defaults to False
+        """
         with open(
             os.path.join(
-            MANAGER_PROMPTS_PATH if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH") else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH"),
-            "manager.txt"), "r") as file:
+                MANAGER_PROMPTS_PATH
+                if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
+                else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH"),
+                "manager.txt",
+            ),
+            "r",
+        ) as file:
             self.role = file.read()
         self.ceo_guidelines = ceo_guidelines
         self.manager_retry = manager_retry
         self.output_directory = output_directory
+        self.interactive = interactive
+        self.emoji = "\U0001F646"
 
     def plans(self) -> Dict:
         """
@@ -51,14 +57,23 @@ class Manager:
                     system_prompt=self.role,
                     user_prompt=self.ceo_guidelines,
                     model="gpt-3.5-turbo",
-                    temperature=1.0
+                    temperature=1.0,
                 )
-                return ast.literal_eval(response.choices[0].message.content)
+                plan = ast.literal_eval(response.choices[0].message.content)
+                if self.interactive:
+                    if "y" in input(f"\U0001F646 Is that plan good for you : {plan} ?").lower():
+                        return plan
+                    else:
+                        continue
+                else:
+                    return plan
             except Exception as err:
                 print(err)
-                print(f"\U0001F646 I've messed up, retrying to plan tasks... {response.choices[0].message.content}")
+                print(
+                    f"\U0001F646 I've messed up, retrying to plan tasks... {response.choices[0].message.content}"
+                )
         print("\U0001F646 I've messed up, I'm not able to do this...")
-    
+
     def hire_employees(self, employees_to_hire: List[object]) -> Dict:
         """
         Hire the given employees
@@ -74,15 +89,9 @@ class Manager:
                 name=employee["name"],
                 role_name=employee["role_name"],
                 creativity=employee["creativity"],
-                emoji=employee["emoji"]
+                emoji=employee["emoji"],
             )
-            try:
-                print(f"{employee['emoji']}")
-            except Exception:
-                pass
-            print(f"{employee['name']}")
         return hired_employees
-        
 
     def fire_employees(self, employees_to_fire: List[Employee]):
         """
@@ -104,7 +113,7 @@ class Manager:
 
         Returns:
             Dict: Production of the team !
-        """        
+        """
         print(f"\U0001F646 Hey, I'm doing plan, just wait for the result !")
         employee_work = None
         for index, task in enumerate(tasks):
@@ -129,10 +138,18 @@ class Manager:
             #         temperature=1.0
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
+            if self.interactive:
+                if "y" not in input(
+                    f"\U0001F646 Ask {task['employee']} to go on with the task \n {task} ?"
+                ).lower():
+                    task["result"] = employee_work
+                    continue
             if task["type"] == "image":
-                employee_work = employees[task["employee"]].ask_image(task["todo"], output_directory=self.output_directory)
+                employee_work = employees[task["employee"]].ask_image(
+                    task["todo"], output_directory=self.output_directory
+                )
             if task["type"] == "text":
-                # Add the previous employee work to the current task to 
+                # Add the previous employee work to the current task to
                 # be used by the assigned employee.
                 if employee_work and "yes" in task["requirements"]:
                     task["todo"] = task["todo"] + f" PREVIOUS : {employee_work}"

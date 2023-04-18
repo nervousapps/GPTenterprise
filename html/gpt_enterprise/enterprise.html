@@ -30,21 +30,27 @@
 <pre><code class="python">&#34;&#34;&#34;
 Enterprise
 &#34;&#34;&#34;
+import os
 import json
 import openai
 
 from gpt_enterprise.manager import Manager
 
+
 class Enterprise:
     &#34;&#34;&#34;
     An enterprise is composed of several employees driven by managers and a CEO (you)
     &#34;&#34;&#34;
-    def __init__(self, 
-                 keyfile: str,
-                 guidelines: str,
-                 output_directory: str,
-                 manager_retry: int,
-                 company_name: str = &#34;GPTenterprise&#34;):
+
+    def __init__(
+        self,
+        keyfile: str,
+        guidelines: str,
+        output_directory: str,
+        manager_retry: int,
+        company_name: str = &#34;GPTenterprise&#34;,
+        interactive: bool = False
+    ):
         &#34;&#34;&#34;
         Create an enterprise with CEO guidelines and hire a manager.
 
@@ -54,21 +60,29 @@ class Enterprise:
             output_directory (str): Output directory
             manager_retry (int): How many times manager will retry to do the plan
             company_name (str, optional): Enterprise&#39;s name. Defaults to &#34;GPTenterprise&#34;.
-        &#34;&#34;&#34;        
+            interactive (bool): Defaults to False
+        &#34;&#34;&#34;
         # Initialize openai api_key
-        with open(keyfile, &#39;r&#39;) as file:
-            openai.api_key = file.read()
+        with open(keyfile, &#34;r&#34;) as file:
+            openai.api_key = (file.read()).strip()
         self.company_name = company_name
         self.employees = {}
         self.tasks_board = []
+        self.interactive = interactive
 
         print(f&#34;\U0001F468 {guidelines}&#34;)
+
+        # Create output directory if not exists
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory, exist_ok=True)
 
         # CEO ask the manager to create a project
         self.manager = Manager(
             ceo_guidelines=guidelines,
             manager_retry=manager_retry,
-            output_directory=output_directory)
+            output_directory=output_directory,
+            interactive=interactive
+        )
 
     def run_enterprise(self) -&gt; dict:
         &#34;&#34;&#34;
@@ -85,22 +99,28 @@ class Enterprise:
         manager_plans = self.manager.plans()
         print(json.dumps(manager_plans, indent=4))
         # Hire needed employees
-        self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+        self.employees = self.manager.hire_employees(
+            employees_to_hire=manager_plans[&#34;employees&#34;]
+        )
         # Extract tasks from manager plan
         self.tasks_board = manager_plans[&#34;tasks&#34;]
         # Do the plan
-        self.tasks_board = self.manager.do_plan(
-            tasks=self.tasks_board,
-            employees=self.employees)
-        manager_plans[&#34;tasks&#34;] = self.tasks_board
-        return manager_plans
-        
-
-    
-
-    
-
-    </code></pre>
+        production_tasks_board = self.manager.do_plan(
+            tasks=self.tasks_board, employees=self.employees
+        )
+        # Return the result of the plan
+        manager_plans[&#34;tasks&#34;] = production_tasks_board
+        # Add final result
+        manager_plans[&#34;final_result&#34;] = production_tasks_board[-1][&#34;result&#34;]
+        if self.interactive:
+            if &#34;y&#34; in input(f&#34;{self.manager.emoji} Here is the final result: \n {manager_plans[&#39;final_result&#39;]} \n Is this final result correct? (y/n) \n \U0001F468&#34;).lower():
+                print(f&#34;{self.manager.emoji} Great ! Nice to have worked with you !&#34;)
+            else:
+                if &#34;y&#34; in input(&#34;Do you want me to retry ? (y/n)\n \U0001F468&#34;).lower():
+                    return self.run_enterprise()
+                else:
+                    quit()
+        return manager_plans</code></pre>
 </details>
 </section>
 <section>
@@ -114,7 +134,7 @@ class Enterprise:
 <dl>
 <dt id="gpt_enterprise.enterprise.Enterprise"><code class="flex name class">
 <span>class <span class="ident">Enterprise</span></span>
-<span>(</span><span>keyfile: str, guidelines: str, output_directory: str, manager_retry: int, company_name: str = 'GPTenterprise')</span>
+<span>(</span><span>keyfile: str, guidelines: str, output_directory: str, manager_retry: int, company_name: str = 'GPTenterprise', interactive: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>An enterprise is composed of several employees driven by managers and a CEO (you)</p>
@@ -131,6 +151,8 @@ class Enterprise:
 <dd>How many times manager will retry to do the plan</dd>
 <dt><strong><code>company_name</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Enterprise's name. Defaults to "GPTenterprise".</dd>
+<dt><strong><code>interactive</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Defaults to False</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -140,12 +162,16 @@ class Enterprise:
     &#34;&#34;&#34;
     An enterprise is composed of several employees driven by managers and a CEO (you)
     &#34;&#34;&#34;
-    def __init__(self, 
-                 keyfile: str,
-                 guidelines: str,
-                 output_directory: str,
-                 manager_retry: int,
-                 company_name: str = &#34;GPTenterprise&#34;):
+
+    def __init__(
+        self,
+        keyfile: str,
+        guidelines: str,
+        output_directory: str,
+        manager_retry: int,
+        company_name: str = &#34;GPTenterprise&#34;,
+        interactive: bool = False
+    ):
         &#34;&#34;&#34;
         Create an enterprise with CEO guidelines and hire a manager.
 
@@ -155,21 +181,29 @@ class Enterprise:
             output_directory (str): Output directory
             manager_retry (int): How many times manager will retry to do the plan
             company_name (str, optional): Enterprise&#39;s name. Defaults to &#34;GPTenterprise&#34;.
-        &#34;&#34;&#34;        
+            interactive (bool): Defaults to False
+        &#34;&#34;&#34;
         # Initialize openai api_key
-        with open(keyfile, &#39;r&#39;) as file:
-            openai.api_key = file.read()
+        with open(keyfile, &#34;r&#34;) as file:
+            openai.api_key = (file.read()).strip()
         self.company_name = company_name
         self.employees = {}
         self.tasks_board = []
+        self.interactive = interactive
 
         print(f&#34;\U0001F468 {guidelines}&#34;)
+
+        # Create output directory if not exists
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory, exist_ok=True)
 
         # CEO ask the manager to create a project
         self.manager = Manager(
             ceo_guidelines=guidelines,
             manager_retry=manager_retry,
-            output_directory=output_directory)
+            output_directory=output_directory,
+            interactive=interactive
+        )
 
     def run_enterprise(self) -&gt; dict:
         &#34;&#34;&#34;
@@ -186,14 +220,27 @@ class Enterprise:
         manager_plans = self.manager.plans()
         print(json.dumps(manager_plans, indent=4))
         # Hire needed employees
-        self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+        self.employees = self.manager.hire_employees(
+            employees_to_hire=manager_plans[&#34;employees&#34;]
+        )
         # Extract tasks from manager plan
         self.tasks_board = manager_plans[&#34;tasks&#34;]
         # Do the plan
-        self.tasks_board = self.manager.do_plan(
-            tasks=self.tasks_board,
-            employees=self.employees)
-        manager_plans[&#34;tasks&#34;] = self.tasks_board
+        production_tasks_board = self.manager.do_plan(
+            tasks=self.tasks_board, employees=self.employees
+        )
+        # Return the result of the plan
+        manager_plans[&#34;tasks&#34;] = production_tasks_board
+        # Add final result
+        manager_plans[&#34;final_result&#34;] = production_tasks_board[-1][&#34;result&#34;]
+        if self.interactive:
+            if &#34;y&#34; in input(f&#34;{self.manager.emoji} Here is the final result: \n {manager_plans[&#39;final_result&#39;]} \n Is this final result correct? (y/n) \n \U0001F468&#34;).lower():
+                print(f&#34;{self.manager.emoji} Great ! Nice to have worked with you !&#34;)
+            else:
+                if &#34;y&#34; in input(&#34;Do you want me to retry ? (y/n)\n \U0001F468&#34;).lower():
+                    return self.run_enterprise()
+                else:
+                    quit()
         return manager_plans</code></pre>
 </details>
 <h3>Methods</h3>
@@ -231,14 +278,27 @@ class Enterprise:
     manager_plans = self.manager.plans()
     print(json.dumps(manager_plans, indent=4))
     # Hire needed employees
-    self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+    self.employees = self.manager.hire_employees(
+        employees_to_hire=manager_plans[&#34;employees&#34;]
+    )
     # Extract tasks from manager plan
     self.tasks_board = manager_plans[&#34;tasks&#34;]
     # Do the plan
-    self.tasks_board = self.manager.do_plan(
-        tasks=self.tasks_board,
-        employees=self.employees)
-    manager_plans[&#34;tasks&#34;] = self.tasks_board
+    production_tasks_board = self.manager.do_plan(
+        tasks=self.tasks_board, employees=self.employees
+    )
+    # Return the result of the plan
+    manager_plans[&#34;tasks&#34;] = production_tasks_board
+    # Add final result
+    manager_plans[&#34;final_result&#34;] = production_tasks_board[-1][&#34;result&#34;]
+    if self.interactive:
+        if &#34;y&#34; in input(f&#34;{self.manager.emoji} Here is the final result: \n {manager_plans[&#39;final_result&#39;]} \n Is this final result correct? (y/n) \n \U0001F468&#34;).lower():
+            print(f&#34;{self.manager.emoji} Great ! Nice to have worked with you !&#34;)
+        else:
+            if &#34;y&#34; in input(&#34;Do you want me to retry ? (y/n)\n \U0001F468&#34;).lower():
+                return self.run_enterprise()
+            else:
+                quit()
     return manager_plans</code></pre>
 </details>
 </dd>

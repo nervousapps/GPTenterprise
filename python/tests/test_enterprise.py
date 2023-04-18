@@ -15,7 +15,7 @@ def test_run_enterprise():
         guidelines="test",
         output_directory="test",
         manager_retry=1,
-        company_name="test"
+        company_name="test",
     )
 
     assert enterprise.company_name == "test"

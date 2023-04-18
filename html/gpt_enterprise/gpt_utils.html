@@ -40,12 +40,10 @@ EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), &#34;employees_p
 
 
 def generate_text(
-        system_prompt: str,
-        user_prompt: str,
-        model: str,
-        temperature: float) -&gt; Generator:
+    system_prompt: str, user_prompt: str, model: str, temperature: float
+) -&gt; Generator:
     &#34;&#34;&#34;
-    
+
 
     Args:
         system_prompt (str): Initialize the system with the given system prompt
@@ -62,26 +60,24 @@ def generate_text(
             # Initialize GPT with system prompt
             {
                 &#34;role&#34;: &#34;system&#34;,
-                &#34;content&#34;: system_prompt # + &#34; Use less words as possible.&#34;
+                &#34;content&#34;: system_prompt,  # + &#34; Use less words as possible.&#34;
             },
             # Generate text relating to the user&#39;s prompt
-            {
-                &#34;role&#34;: &#34;user&#34;,
-                &#34;content&#34;: user_prompt
-            }
+            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: user_prompt},
         ],
-        temperature=temperature
+        temperature=temperature,
     )
 
     return response
 
 
 def generate_image(
-        base_name: str,
-        user_prompt: str,
-        output_directory: str,
-        system_prompt: str = &#34;&#34;,
-        nb_image: int = 1) -&gt; Tuple[str, List[str]]:
+    base_name: str,
+    user_prompt: str,
+    output_directory: str,
+    system_prompt: str = &#34;&#34;,
+    nb_image: int = 1,
+) -&gt; Tuple[str, List[str]]:
     &#34;&#34;&#34;
     Generate a prompt base on user_prompt and inject it to DALL-E
     to generate images.
@@ -104,14 +100,13 @@ def generate_image(
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {
                     &#34;role&#34;: &#34;system&#34;,
-                    &#34;content&#34;: f&#34;{file.read()}&#34; + \
-                        f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34; if system_prompt else &#34;&#34;
+                    &#34;content&#34;: f&#34;{file.read()}&#34;
+                    + f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34;
+                    if system_prompt
+                    else &#34;&#34;,
                 },
                 # Generate a subject
-                {
-                    &#34;role&#34;: &#34;user&#34;,
-                    &#34;content&#34;: f&#34;SUBJECT {user_prompt}&#34;
-                }
+                {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: f&#34;SUBJECT {user_prompt}&#34;},
             ],
         )
 
@@ -126,15 +121,15 @@ def generate_image(
     generated_image_names = []
 
     # Download images
-    for index, image in enumerate(image_response[&#39;data&#39;]):
-        img_data = requests.get(image[&#39;url&#39;]).content
-        img_name = f&#39;{base_name}_{index}.jpg&#39;
+    for index, image in enumerate(image_response[&#34;data&#34;]):
+        img_data = requests.get(image[&#34;url&#34;]).content
+        img_name = f&#34;{base_name}_{index}.jpg&#34;
         img_path = os.path.join(output_directory, img_name)
-        with open(img_path, &#39;wb&#39;) as handler:
+        with open(img_path, &#34;wb&#34;) as handler:
             handler.write(img_data)
             generated_image_names.append(f&#34;./{img_name}&#34;)
 
-    return response.choices[0].message.content ,generated_image_names</code></pre>
+    return response.choices[0].message.content, generated_image_names</code></pre>
 </details>
 </section>
 <section>
@@ -173,11 +168,12 @@ to generate images.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def generate_image(
-        base_name: str,
-        user_prompt: str,
-        output_directory: str,
-        system_prompt: str = &#34;&#34;,
-        nb_image: int = 1) -&gt; Tuple[str, List[str]]:
+    base_name: str,
+    user_prompt: str,
+    output_directory: str,
+    system_prompt: str = &#34;&#34;,
+    nb_image: int = 1,
+) -&gt; Tuple[str, List[str]]:
     &#34;&#34;&#34;
     Generate a prompt base on user_prompt and inject it to DALL-E
     to generate images.
@@ -200,14 +196,13 @@ to generate images.</p>
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {
                     &#34;role&#34;: &#34;system&#34;,
-                    &#34;content&#34;: f&#34;{file.read()}&#34; + \
-                        f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34; if system_prompt else &#34;&#34;
+                    &#34;content&#34;: f&#34;{file.read()}&#34;
+                    + f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34;
+                    if system_prompt
+                    else &#34;&#34;,
                 },
                 # Generate a subject
-                {
-                    &#34;role&#34;: &#34;user&#34;,
-                    &#34;content&#34;: f&#34;SUBJECT {user_prompt}&#34;
-                }
+                {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: f&#34;SUBJECT {user_prompt}&#34;},
             ],
         )
 
@@ -222,15 +217,15 @@ to generate images.</p>
     generated_image_names = []
 
     # Download images
-    for index, image in enumerate(image_response[&#39;data&#39;]):
-        img_data = requests.get(image[&#39;url&#39;]).content
-        img_name = f&#39;{base_name}_{index}.jpg&#39;
+    for index, image in enumerate(image_response[&#34;data&#34;]):
+        img_data = requests.get(image[&#34;url&#34;]).content
+        img_name = f&#34;{base_name}_{index}.jpg&#34;
         img_path = os.path.join(output_directory, img_name)
-        with open(img_path, &#39;wb&#39;) as handler:
+        with open(img_path, &#34;wb&#34;) as handler:
             handler.write(img_data)
             generated_image_names.append(f&#34;./{img_name}&#34;)
 
-    return response.choices[0].message.content ,generated_image_names</code></pre>
+    return response.choices[0].message.content, generated_image_names</code></pre>
 </details>
 </dd>
 <dt id="gpt_enterprise.gpt_utils.generate_text"><code class="name flex">
@@ -258,12 +253,10 @@ to generate images.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def generate_text(
-        system_prompt: str,
-        user_prompt: str,
-        model: str,
-        temperature: float) -&gt; Generator:
+    system_prompt: str, user_prompt: str, model: str, temperature: float
+) -&gt; Generator:
     &#34;&#34;&#34;
-    
+
 
     Args:
         system_prompt (str): Initialize the system with the given system prompt
@@ -280,15 +273,12 @@ to generate images.</p>
             # Initialize GPT with system prompt
             {
                 &#34;role&#34;: &#34;system&#34;,
-                &#34;content&#34;: system_prompt # + &#34; Use less words as possible.&#34;
+                &#34;content&#34;: system_prompt,  # + &#34; Use less words as possible.&#34;
             },
             # Generate text relating to the user&#39;s prompt
-            {
-                &#34;role&#34;: &#34;user&#34;,
-                &#34;content&#34;: user_prompt
-            }
+            {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: user_prompt},
         ],
-        temperature=temperature
+        temperature=temperature,
     )
 
     return response</code></pre>

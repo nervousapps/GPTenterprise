@@ -6,13 +6,16 @@ import pytest
 from gpt_enterprise.employee import Employee
 
 
-@pytest.mark.parametrize("role_name, role_filename, role_prompt", [
-    ("developer", "developer.txt", "What is your task?"),
-    ("developer", os.path.join(os.path.dirname(__file__), "developer.txt"), None),
-    ("designer", None, "What is your image?"),
-    ("designer", None, None),
-    (None, None, None)
-])
+@pytest.mark.parametrize(
+    "role_name, role_filename, role_prompt",
+    [
+        ("developer", "developer.txt", "What is your task?"),
+        ("developer", os.path.join(os.path.dirname(__file__), "developer.txt"), None),
+        ("designer", None, "What is your image?"),
+        ("designer", None, None),
+        (None, None, None),
+    ],
+)
 def test_employee_creation(role_name, role_filename, role_prompt):
     """
     Test case for employee creation
@@ -39,6 +42,7 @@ def test_employee_ask_task(mocker):
     employee = Employee("developer", role_prompt="What is your task?")
     mocker.patch("gpt_enterprise.employee.generate_text", return_value="Do something")
     assert employee.ask_task("Do something") == "Do something"
+
 
 def test_employee_ask_image(mocker):
     """
