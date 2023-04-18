@@ -34,26 +34,37 @@ import os
 import ast
 from typing import List, Dict
 
-from gpt_enterprise.gpt_utils import (
-    generate_text,
-    MANAGER_PROMPTS_PATH
-)
+from gpt_enterprise.gpt_utils import generate_text
 from gpt_enterprise.employee import Employee
+
+
+MANAGER_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), &#34;managers_prompts&#34;)
+
 
 class Manager:
     &#34;&#34;&#34;
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     &#34;&#34;&#34;
-    def __init__(self, ceo_guidelines: str):
+    def __init__(self, 
+                 ceo_guidelines: str, 
+                 manager_retry: int, 
+                 output_directory: str):
         &#34;&#34;&#34;_summary_
 
         Args:
             ceo_guidelines (str): _description_
-        &#34;&#34;&#34;
-        with open(os.path.join(MANAGER_PROMPTS_PATH, &#34;manager.txt&#34;), &#34;r&#34;) as file:
+            manager_retry (int): _description_
+            output_directory (str): _description_
+        &#34;&#34;&#34;        
+        with open(
+            os.path.join(
+            MANAGER_PROMPTS_PATH if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;) else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
+            &#34;manager.txt&#34;), &#34;r&#34;) as file:
             self.role = file.read()
         self.ceo_guidelines = ceo_guidelines
+        self.manager_retry = manager_retry
+        self.output_directory = output_directory
 
     def plans(self) -&gt; Dict:
         &#34;&#34;&#34;
@@ -62,7 +73,7 @@ class Manager:
         Returns:
             Dict: A dict with the following keys: employees, tasks
         &#34;&#34;&#34;
-        for _ in range(int(os.getenv(&#34;MANAGER_RETRY&#34;))):
+        for _ in range(self.manager_retry):
             try:
                 print(f&#34;\U0001F646 Hey, I&#39;m doing plans to achieve your guidelines !&#34;)
                 response = generate_text(
@@ -84,7 +95,7 @@ class Manager:
         Args:
             employee (List[object]): _description_
         &#34;&#34;&#34;
-        print(f&#34;\U0001F646 Hey, I&#39;m hiring employees needed !&#34;)
+        print(f&#34;\U0001F646 Hey, I&#39;ve hired employees ! Please welcome :&#34;)
         hired_employees = {}
         for employee in employees_to_hire:
             hired_employees[employee[&#34;name&#34;]] = Employee(
@@ -148,7 +159,7 @@ class Manager:
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
             if task[&#34;type&#34;] == &#34;image&#34;:
-                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;])
+                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
             if task[&#34;type&#34;] == &#34;text&#34;:
                 # Add the previous employee work to the current task to 
                 # be used by the assigned employee.
@@ -171,7 +182,7 @@ class Manager:
 <dl>
 <dt id="gpt_enterprise.manager.Manager"><code class="flex name class">
 <span>class <span class="ident">Manager</span></span>
-<span>(</span><span>ceo_guidelines: str)</span>
+<span>(</span><span>ceo_guidelines: str, manager_retry: int, output_directory: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
@@ -180,6 +191,10 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>ceo_guidelines</code></strong> :&ensp;<code>str</code></dt>
+<dd><em>description</em></dd>
+<dt><strong><code>manager_retry</code></strong> :&ensp;<code>int</code></dt>
+<dd><em>description</em></dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>str</code></dt>
 <dd><em>description</em></dd>
 </dl></div>
 <details class="source">
@@ -191,15 +206,25 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     &#34;&#34;&#34;
-    def __init__(self, ceo_guidelines: str):
+    def __init__(self, 
+                 ceo_guidelines: str, 
+                 manager_retry: int, 
+                 output_directory: str):
         &#34;&#34;&#34;_summary_
 
         Args:
             ceo_guidelines (str): _description_
-        &#34;&#34;&#34;
-        with open(os.path.join(MANAGER_PROMPTS_PATH, &#34;manager.txt&#34;), &#34;r&#34;) as file:
+            manager_retry (int): _description_
+            output_directory (str): _description_
+        &#34;&#34;&#34;        
+        with open(
+            os.path.join(
+            MANAGER_PROMPTS_PATH if not os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;) else os.getenv(&#34;CUSTOM_MANAGER_PROMPTS_PATH&#34;),
+            &#34;manager.txt&#34;), &#34;r&#34;) as file:
             self.role = file.read()
         self.ceo_guidelines = ceo_guidelines
+        self.manager_retry = manager_retry
+        self.output_directory = output_directory
 
     def plans(self) -&gt; Dict:
         &#34;&#34;&#34;
@@ -208,7 +233,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
         Returns:
             Dict: A dict with the following keys: employees, tasks
         &#34;&#34;&#34;
-        for _ in range(int(os.getenv(&#34;MANAGER_RETRY&#34;))):
+        for _ in range(self.manager_retry):
             try:
                 print(f&#34;\U0001F646 Hey, I&#39;m doing plans to achieve your guidelines !&#34;)
                 response = generate_text(
@@ -230,7 +255,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
         Args:
             employee (List[object]): _description_
         &#34;&#34;&#34;
-        print(f&#34;\U0001F646 Hey, I&#39;m hiring employees needed !&#34;)
+        print(f&#34;\U0001F646 Hey, I&#39;ve hired employees ! Please welcome :&#34;)
         hired_employees = {}
         for employee in employees_to_hire:
             hired_employees[employee[&#34;name&#34;]] = Employee(
@@ -294,7 +319,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
             if task[&#34;type&#34;] == &#34;image&#34;:
-                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;])
+                employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
             if task[&#34;type&#34;] == &#34;text&#34;:
                 # Add the previous employee work to the current task to 
                 # be used by the assigned employee.
@@ -366,7 +391,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
         #     )
         #     task = ast.literal_eval(response.choices[0].message.content)
         if task[&#34;type&#34;] == &#34;image&#34;:
-            employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;])
+            employee_work = employees[task[&#34;employee&#34;]].ask_image(task[&#34;todo&#34;], output_directory=self.output_directory)
         if task[&#34;type&#34;] == &#34;text&#34;:
             # Add the previous employee work to the current task to 
             # be used by the assigned employee.
@@ -423,7 +448,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
     Args:
         employee (List[object]): _description_
     &#34;&#34;&#34;
-    print(f&#34;\U0001F646 Hey, I&#39;m hiring employees needed !&#34;)
+    print(f&#34;\U0001F646 Hey, I&#39;ve hired employees ! Please welcome :&#34;)
     hired_employees = {}
     for employee in employees_to_hire:
         hired_employees[employee[&#34;name&#34;]] = Employee(
@@ -462,7 +487,7 @@ The manager will hire employees and plan tasks to achieve CEO guidelines inside 
     Returns:
         Dict: A dict with the following keys: employees, tasks
     &#34;&#34;&#34;
-    for _ in range(int(os.getenv(&#34;MANAGER_RETRY&#34;))):
+    for _ in range(self.manager_retry):
         try:
             print(f&#34;\U0001F646 Hey, I&#39;m doing plans to achieve your guidelines !&#34;)
             response = generate_text(

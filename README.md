@@ -1,5 +1,7 @@
 <h1 align="center">
 GPTenterprise :zzz: :robot:
+</h1>
+<h1 align="center">
 <img width="200" src="./logo.png" alt="GPTenterprise">
 </h1>
 
@@ -25,14 +27,7 @@ This is basically python utilities to connect to OpenaAI API and generate conten
 
 - Python 3.7 or newer
 
-- A python venv is recommended, to create one, in your terminal, dive into the repo directory and do:
-```bash
-python3.x -m venv gptenterprise
-```
-And enable it
-```bash
-source ./gptenterprise/bin/activate
-```
+- [Open API key](https://platform.openai.com/account/api-keys)
 
 ## :surfing_woman: Installation
 1 - Clone this repository
@@ -45,7 +40,16 @@ git clone https://github.com/nervousapps/GPTenterprise.git
 cd GPTenterprise
 ```
 
-3- Install GPTenterprise package and dependencies by executing:
+3 - A python venv is recommended, to create one, in your terminal:
+```bash
+python3 -m venv gptenterprise
+```
+And enable it
+```bash
+source ./gptenterprise/bin/activate
+```
+
+4 - Install GPTenterprise package and dependencies by executing:
 ```bash
 pip install ./python
 ```
@@ -53,7 +57,7 @@ pip install ./python
 ## :unicorn: OpenAI key configuration
 - Fill openai_key.txt.template with your opanai key and rename it to openai_key.txt. Or create a new one using:
 ```bash
-nano python/gpt_enterprise/openai_key.txt
+nano ./openai_key.txt
 ```
 
 
@@ -68,11 +72,9 @@ The manager will make a plan, with all employees to hire and the sequences of ta
 
 ## Documentation
 
-<iframe  frameborder="0" 
-    style=" width: 100%; height: 110%;" src="./html/gpt_enterprise/index.html">
-</iframe>
+[HTML documentation here](https://github.com/nervousapps/GPTenterprise/tree/master/html/gpt_enterprise).
 
-Manager prompts defines the object structure for employees, tasks and global object. These structures must not be changed as they are used in the code.
+The manager prompt defines the object structure for employees, tasks and global object. These structures must not be changed as they are used in the code.
 
 Employee structure
 ```python
@@ -121,14 +123,15 @@ Plans structure
 Under construction
 
 ## Going further
-- [] rework manager prompt
-- [] employees interactions with each other
-- [] asynchronous operations
-- [] keep previous responses in memory
+- rework manager prompt
+- enhanced employees interactions
+- asynchronous operations
+- multi managers enterprise
+- keep previous responses in memory
 
 
-## Miscelleneous
-### :old_man: Quickstart POC
+## :raccoon: Miscelleneous
+### :older_woman: Quickstart POC
 
 To see an example of what can be done with the idea of GPTenterprise, let use the webgpt.py
 

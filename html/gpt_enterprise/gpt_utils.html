@@ -37,7 +37,6 @@ from typing import Tuple, List, Generator
 
 # Prompts base path
 EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), &#34;employees_prompts&#34;)
-MANAGER_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), &#34;managers_prompts&#34;)
 
 
 def generate_text(
@@ -45,21 +44,22 @@ def generate_text(
         user_prompt: str,
         model: str,
         temperature: float) -&gt; Generator:
-    &#34;&#34;&#34;_summary_
+    &#34;&#34;&#34;
+    
 
     Args:
         system_prompt (str): Initialize the system with the given system prompt
         user_prompt (str): Assistant will try to give the best answer for the given user prompt
-        model (str): _description_
-        temperature (float): _description_
+        model (str): OpenAI model to be used
+        temperature (float): Temperature
 
     Returns:
-        str: _description_
+        Generator: GPT response object
     &#34;&#34;&#34;
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
-            # Initialize ChatGPT with system prompt
+            # Initialize GPT with system prompt
             {
                 &#34;role&#34;: &#34;system&#34;,
                 &#34;content&#34;: system_prompt # + &#34; Use less words as possible.&#34;
@@ -77,17 +77,21 @@ def generate_text(
 
 
 def generate_image(
-        system_prompt: str,
         base_name: str,
         user_prompt: str,
-        output_path: str,
+        output_directory: str,
+        system_prompt: str = &#34;&#34;,
         nb_image: int = 1) -&gt; Tuple[str, List[str]]:
-    &#34;&#34;&#34;Generate a prompt and inject it to DALL-E
+    &#34;&#34;&#34;
+    Generate a prompt base on user_prompt and inject it to DALL-E
+    to generate images.
 
     Args:
+        system_prompt (str): Initialize the system with the given system prompt
+        user_prompt (str): Assistant will try to give the best answer for the given user prompt
         base_name (str): Images&#39; base name
-        prompt (_type_): Prompt to generate
-        nb_image (_type_): number of image to generate
+        output_directory (str): Images&#39; output directory
+        nb_image (_type_): Number of image to generate
 
     Returns:
         list: Generated image names
@@ -100,7 +104,8 @@ def generate_image(
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {
                     &#34;role&#34;: &#34;system&#34;,
-                    &#34;content&#34;: f&#34;{file.read()} You are also {system_prompt} But keep in mind that {file.read()}&#34;
+                    &#34;content&#34;: f&#34;{file.read()}&#34; + \
+                        f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34; if system_prompt else &#34;&#34;
                 },
                 # Generate a subject
                 {
@@ -110,7 +115,8 @@ def generate_image(
             ],
         )
 
-    # Create images
+    # Create images, troncate prompt to 70 characters
+    # to be sure it will be accepted by DALL-E
     image_response = openai.Image.create(
         prompt=response.choices[0].message.content[:70],
         n=nb_image,
@@ -119,11 +125,11 @@ def generate_image(
 
     generated_image_names = []
 
-    # Download image
+    # Download images
     for index, image in enumerate(image_response[&#39;data&#39;]):
         img_data = requests.get(image[&#39;url&#39;]).content
         img_name = f&#39;{base_name}_{index}.jpg&#39;
-        img_path = os.path.join(output_path, img_name)
+        img_path = os.path.join(output_directory, img_name)
         with open(img_path, &#39;wb&#39;) as handler:
             handler.write(img_data)
             generated_image_names.append(f&#34;./{img_name}&#34;)
@@ -139,18 +145,23 @@ def generate_image(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="gpt_enterprise.gpt_utils.generate_image"><code class="name flex">
-<span>def <span class="ident">generate_image</span></span>(<span>system_prompt: str, base_name: str, user_prompt: str, output_path: str, nb_image: int = 1) ‑> Tuple[str, List[str]]</span>
+<span>def <span class="ident">generate_image</span></span>(<span>base_name: str, user_prompt: str, output_directory: str, system_prompt: str = '', nb_image: int = 1) ‑> Tuple[str, List[str]]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Generate a prompt and inject it to DALL-E</p>
+<div class="desc"><p>Generate a prompt base on user_prompt and inject it to DALL-E
+to generate images.</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>system_prompt</code></strong> :&ensp;<code>str</code></dt>
+<dd>Initialize the system with the given system prompt</dd>
+<dt><strong><code>user_prompt</code></strong> :&ensp;<code>str</code></dt>
+<dd>Assistant will try to give the best answer for the given user prompt</dd>
 <dt><strong><code>base_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Images' base name</dd>
-<dt><strong><code>prompt</code></strong> :&ensp;<code>_type_</code></dt>
-<dd>Prompt to generate</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>Images' output directory</dd>
 <dt><strong><code>nb_image</code></strong> :&ensp;<code>_type_</code></dt>
-<dd>number of image to generate</dd>
+<dd>Number of image to generate</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -162,17 +173,21 @@ def generate_image(
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def generate_image(
-        system_prompt: str,
         base_name: str,
         user_prompt: str,
-        output_path: str,
+        output_directory: str,
+        system_prompt: str = &#34;&#34;,
         nb_image: int = 1) -&gt; Tuple[str, List[str]]:
-    &#34;&#34;&#34;Generate a prompt and inject it to DALL-E
+    &#34;&#34;&#34;
+    Generate a prompt base on user_prompt and inject it to DALL-E
+    to generate images.
 
     Args:
+        system_prompt (str): Initialize the system with the given system prompt
+        user_prompt (str): Assistant will try to give the best answer for the given user prompt
         base_name (str): Images&#39; base name
-        prompt (_type_): Prompt to generate
-        nb_image (_type_): number of image to generate
+        output_directory (str): Images&#39; output directory
+        nb_image (_type_): Number of image to generate
 
     Returns:
         list: Generated image names
@@ -185,7 +200,8 @@ def generate_image(
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {
                     &#34;role&#34;: &#34;system&#34;,
-                    &#34;content&#34;: f&#34;{file.read()} You are also {system_prompt} But keep in mind that {file.read()}&#34;
+                    &#34;content&#34;: f&#34;{file.read()}&#34; + \
+                        f&#34; You are also {system_prompt} But keep in mind that {file.read()}&#34; if system_prompt else &#34;&#34;
                 },
                 # Generate a subject
                 {
@@ -195,7 +211,8 @@ def generate_image(
             ],
         )
 
-    # Create images
+    # Create images, troncate prompt to 70 characters
+    # to be sure it will be accepted by DALL-E
     image_response = openai.Image.create(
         prompt=response.choices[0].message.content[:70],
         n=nb_image,
@@ -204,11 +221,11 @@ def generate_image(
 
     generated_image_names = []
 
-    # Download image
+    # Download images
     for index, image in enumerate(image_response[&#39;data&#39;]):
         img_data = requests.get(image[&#39;url&#39;]).content
         img_name = f&#39;{base_name}_{index}.jpg&#39;
-        img_path = os.path.join(output_path, img_name)
+        img_path = os.path.join(output_directory, img_name)
         with open(img_path, &#39;wb&#39;) as handler:
             handler.write(img_data)
             generated_image_names.append(f&#34;./{img_name}&#34;)
@@ -220,22 +237,21 @@ def generate_image(
 <span>def <span class="ident">generate_text</span></span>(<span>system_prompt: str, user_prompt: str, model: str, temperature: float) ‑> Generator</span>
 </code></dt>
 <dd>
-<div class="desc"><p><em>summary</em></p>
-<h2 id="args">Args</h2>
+<div class="desc"><h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>system_prompt</code></strong> :&ensp;<code>str</code></dt>
 <dd>Initialize the system with the given system prompt</dd>
 <dt><strong><code>user_prompt</code></strong> :&ensp;<code>str</code></dt>
 <dd>Assistant will try to give the best answer for the given user prompt</dd>
 <dt><strong><code>model</code></strong> :&ensp;<code>str</code></dt>
-<dd><em>description</em></dd>
+<dd>OpenAI model to be used</dd>
 <dt><strong><code>temperature</code></strong> :&ensp;<code>float</code></dt>
-<dd><em>description</em></dd>
+<dd>Temperature</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><code>str</code></dt>
-<dd><em>description</em></dd>
+<dt><code>Generator</code></dt>
+<dd>GPT response object</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -246,21 +262,22 @@ def generate_image(
         user_prompt: str,
         model: str,
         temperature: float) -&gt; Generator:
-    &#34;&#34;&#34;_summary_
+    &#34;&#34;&#34;
+    
 
     Args:
         system_prompt (str): Initialize the system with the given system prompt
         user_prompt (str): Assistant will try to give the best answer for the given user prompt
-        model (str): _description_
-        temperature (float): _description_
+        model (str): OpenAI model to be used
+        temperature (float): Temperature
 
     Returns:
-        str: _description_
+        Generator: GPT response object
     &#34;&#34;&#34;
     response = openai.ChatCompletion.create(
         model=model,
         messages=[
-            # Initialize ChatGPT with system prompt
+            # Initialize GPT with system prompt
             {
                 &#34;role&#34;: &#34;system&#34;,
                 &#34;content&#34;: system_prompt # + &#34; Use less words as possible.&#34;

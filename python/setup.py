@@ -17,8 +17,7 @@ setup(name='GPTenterprise',
       packages = find_packages(),  
       package_data = {
             # If any package contains *.txt or *.rst files, include them:
-            '': ['*.txt', './managers_prompts/*.txt'],
-            '': ['*.txt', './employees_prompts/*.txt'],
+            '': ['*.txt', './*_prompts/*.txt'],
       },
       include_package_data=True,
       install_requires=requirements,

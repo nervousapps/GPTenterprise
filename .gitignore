@@ -1,6 +1,7 @@
 .vscode
 .pytest_cache
 __pycache__
+build
 openai_key.txt
 generated
 gptenterprise*

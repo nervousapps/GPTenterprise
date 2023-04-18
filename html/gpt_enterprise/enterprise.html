@@ -30,7 +30,6 @@
 <pre><code class="python">&#34;&#34;&#34;
 Enterprise
 &#34;&#34;&#34;
-import os
 import json
 import openai
 
@@ -43,14 +42,19 @@ class Enterprise:
     def __init__(self, 
                  keyfile: str,
                  guidelines: str,
-                 company_name: str = &#34;GPTenterprise&#34;) -&gt; None:
-        &#34;&#34;&#34;_summary_
+                 output_directory: str,
+                 manager_retry: int,
+                 company_name: str = &#34;GPTenterprise&#34;):
+        &#34;&#34;&#34;
+        Create an enterprise with CEO guidelines and hire a manager.
 
         Args:
-            keyfile (str): _description_
-            guidelines (str): _description_
-            company_name (str, optional): _description_. Defaults to &#34;GPTenterprise&#34;.
-        &#34;&#34;&#34;
+            keyfile (str): Pth to openai key file
+            guidelines (str): CEO guidelines
+            output_directory (str): Output directory
+            manager_retry (int): How many times manager will retry to do the plan
+            company_name (str, optional): Enterprise&#39;s name. Defaults to &#34;GPTenterprise&#34;.
+        &#34;&#34;&#34;        
         # Initialize openai api_key
         with open(keyfile, &#39;r&#39;) as file:
             openai.api_key = file.read()
@@ -61,20 +65,30 @@ class Enterprise:
         print(f&#34;\U0001F468 {guidelines}&#34;)
 
         # CEO ask the manager to create a project
-        self.manager = Manager(ceo_guidelines=guidelines)
+        self.manager = Manager(
+            ceo_guidelines=guidelines,
+            manager_retry=manager_retry,
+            output_directory=output_directory)
 
     def run_enterprise(self) -&gt; dict:
         &#34;&#34;&#34;
-        
+        Run the enterprise:
+            - Ask the manager to create a project
+            - Hire employees
+            - Do the plan
+            - Return the result of the plan
 
         Returns:
-            dict: _description_
+            dict: Plan wih employess and update tasks with result
         &#34;&#34;&#34;
         # Do plan
         manager_plans = self.manager.plans()
         print(json.dumps(manager_plans, indent=4))
+        # Hire needed employees
         self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+        # Extract tasks from manager plan
         self.tasks_board = manager_plans[&#34;tasks&#34;]
+        # Do the plan
         self.tasks_board = self.manager.do_plan(
             tasks=self.tasks_board,
             employees=self.employees)
@@ -100,19 +114,23 @@ class Enterprise:
 <dl>
 <dt id="gpt_enterprise.enterprise.Enterprise"><code class="flex name class">
 <span>class <span class="ident">Enterprise</span></span>
-<span>(</span><span>keyfile: str, guidelines: str, company_name: str = 'GPTenterprise')</span>
+<span>(</span><span>keyfile: str, guidelines: str, output_directory: str, manager_retry: int, company_name: str = 'GPTenterprise')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>An enterprise is composed of several employees driven by managers and a CEO (you)</p>
-<p><em>summary</em></p>
+<p>Create an enterprise with CEO guidelines and hire a manager.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>keyfile</code></strong> :&ensp;<code>str</code></dt>
-<dd><em>description</em></dd>
+<dd>Pth to openai key file</dd>
 <dt><strong><code>guidelines</code></strong> :&ensp;<code>str</code></dt>
-<dd><em>description</em></dd>
+<dd>CEO guidelines</dd>
+<dt><strong><code>output_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>Output directory</dd>
+<dt><strong><code>manager_retry</code></strong> :&ensp;<code>int</code></dt>
+<dd>How many times manager will retry to do the plan</dd>
 <dt><strong><code>company_name</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd><em>description</em>. Defaults to "GPTenterprise".</dd>
+<dd>Enterprise's name. Defaults to "GPTenterprise".</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -125,14 +143,19 @@ class Enterprise:
     def __init__(self, 
                  keyfile: str,
                  guidelines: str,
-                 company_name: str = &#34;GPTenterprise&#34;) -&gt; None:
-        &#34;&#34;&#34;_summary_
+                 output_directory: str,
+                 manager_retry: int,
+                 company_name: str = &#34;GPTenterprise&#34;):
+        &#34;&#34;&#34;
+        Create an enterprise with CEO guidelines and hire a manager.
 
         Args:
-            keyfile (str): _description_
-            guidelines (str): _description_
-            company_name (str, optional): _description_. Defaults to &#34;GPTenterprise&#34;.
-        &#34;&#34;&#34;
+            keyfile (str): Pth to openai key file
+            guidelines (str): CEO guidelines
+            output_directory (str): Output directory
+            manager_retry (int): How many times manager will retry to do the plan
+            company_name (str, optional): Enterprise&#39;s name. Defaults to &#34;GPTenterprise&#34;.
+        &#34;&#34;&#34;        
         # Initialize openai api_key
         with open(keyfile, &#39;r&#39;) as file:
             openai.api_key = file.read()
@@ -143,20 +166,30 @@ class Enterprise:
         print(f&#34;\U0001F468 {guidelines}&#34;)
 
         # CEO ask the manager to create a project
-        self.manager = Manager(ceo_guidelines=guidelines)
+        self.manager = Manager(
+            ceo_guidelines=guidelines,
+            manager_retry=manager_retry,
+            output_directory=output_directory)
 
     def run_enterprise(self) -&gt; dict:
         &#34;&#34;&#34;
-        
+        Run the enterprise:
+            - Ask the manager to create a project
+            - Hire employees
+            - Do the plan
+            - Return the result of the plan
 
         Returns:
-            dict: _description_
+            dict: Plan wih employess and update tasks with result
         &#34;&#34;&#34;
         # Do plan
         manager_plans = self.manager.plans()
         print(json.dumps(manager_plans, indent=4))
+        # Hire needed employees
         self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+        # Extract tasks from manager plan
         self.tasks_board = manager_plans[&#34;tasks&#34;]
+        # Do the plan
         self.tasks_board = self.manager.do_plan(
             tasks=self.tasks_board,
             employees=self.employees)
@@ -169,10 +202,15 @@ class Enterprise:
 <span>def <span class="ident">run_enterprise</span></span>(<span>self) ‑> dict</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="returns">Returns</h2>
+<div class="desc"><p>Run the enterprise:
+- Ask the manager to create a project
+- Hire employees
+- Do the plan
+- Return the result of the plan</p>
+<h2 id="returns">Returns</h2>
 <dl>
 <dt><code>dict</code></dt>
-<dd><em>description</em></dd>
+<dd>Plan wih employess and update tasks with result</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -180,16 +218,23 @@ class Enterprise:
 </summary>
 <pre><code class="python">def run_enterprise(self) -&gt; dict:
     &#34;&#34;&#34;
-    
+    Run the enterprise:
+        - Ask the manager to create a project
+        - Hire employees
+        - Do the plan
+        - Return the result of the plan
 
     Returns:
-        dict: _description_
+        dict: Plan wih employess and update tasks with result
     &#34;&#34;&#34;
     # Do plan
     manager_plans = self.manager.plans()
     print(json.dumps(manager_plans, indent=4))
+    # Hire needed employees
     self.employees = self.manager.hire_employees(employees_to_hire=manager_plans[&#34;employees&#34;])
+    # Extract tasks from manager plan
     self.tasks_board = manager_plans[&#34;tasks&#34;]
+    # Do the plan
     self.tasks_board = self.manager.do_plan(
         tasks=self.tasks_board,
         employees=self.employees)
