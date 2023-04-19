@@ -1,5 +1,7 @@
 """
+\U0001F646
 Manager
+\U0001F646
 """
 import os
 import ast
@@ -13,8 +15,7 @@ MANAGER_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), "managers_prompts
 
 
 class Manager:
-    """
-    \U0001F646
+    """    
     A manager will try to achieve CEO guidelines by hiring employes and give them tasks.
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     """

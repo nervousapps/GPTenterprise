@@ -6,6 +6,7 @@ import pytest
 from gpt_enterprise.enterprise import Enterprise
 
 
+@pytest.mark.skip("Need to mock openai")
 def test_run_enterprise():
     """
     Test to run a fake enterprise

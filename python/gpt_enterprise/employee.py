@@ -1,5 +1,7 @@
 """
+\U0001F469
 Employee
+\U0001F469
 """
 from typing import List, Tuple
 
@@ -8,7 +10,6 @@ from gpt_enterprise.gpt_utils import generate_text, generate_image
 
 class Employee:
     """
-    "\U0001F469"
     The Employee class represents an employee that act as the given system prompt.
     It can be used to do all you want, just tell him how to act.
     """
@@ -23,7 +24,7 @@ class Employee:
         creativity: float = 1.0,
         gpt_version: str = "gpt-3.5-turbo",
     ):
-        """
+        """        
         Give your employee a role file for him to read it and act like you want.
 
         Employe name and role name form the unique identifier for the employee.

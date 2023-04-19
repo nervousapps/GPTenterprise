@@ -2,7 +2,7 @@
 :office: GPTenterprise :zzz: :robot:
 </h1>
 <h1 align="center">
-<img width="200" src="./logo.png" alt="GPTenterprise">
+<img width="200" src="https://raw.githubusercontent.com/nervousapps/GPTenterprise/master/logo.png" alt="GPTenterprise">
 </h1>
 
 [![python](https://img.shields.io/badge/Python-3.7-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)

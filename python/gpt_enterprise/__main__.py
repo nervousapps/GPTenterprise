@@ -9,7 +9,6 @@ from gpt_enterprise.enterprise import Enterprise
 
 
 def main():
-    """\U0001F4BE"""
     load_dotenv(dotenv_path=sys.argv[1])
 
     interactive = os.getenv("INTERACTIVE") == "yes"

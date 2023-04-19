@@ -1,5 +1,7 @@
 """
+\U0001F3E2
 Enterprise
+\U0001F3E2
 """
 import os
 import json
@@ -10,7 +12,6 @@ from gpt_enterprise.manager import Manager
 
 class Enterprise:
     """
-    \U0001F3E2
     An enterprise is composed of several employees driven by managers and a CEO (you)
     """
 
