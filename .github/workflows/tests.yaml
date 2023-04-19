@@ -1,4 +1,4 @@
-name: tests
+name: PyTest
 
 # test whenever there are new commits on master
 on:

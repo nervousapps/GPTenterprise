@@ -24,7 +24,7 @@ class Employee:
         creativity: float = 1.0,
         gpt_version: str = "gpt-3.5-turbo",
     ):
-        """        
+        """
         Give your employee a role file for him to read it and act like you want.
 
         Employe name and role name form the unique identifier for the employee.
@@ -100,7 +100,7 @@ class Employee:
     ) -> Tuple[str, List[str]]:
         """
         Ask the employee to create an image with the specified manager request.
-        The employee will generate a prompt and ask DALL-E to generate the specified 
+        The employee will generate a prompt and ask DALL-E to generate the specified
         number of images.
 
         Args:

@@ -7,13 +7,33 @@
 
 [![python](https://img.shields.io/badge/Python-3.7-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![openai](https://img.shields.io/badge/openai%20-GPT-yellowgreen)](https://www.openai.com)
-[![pytest](https://img.shields.io/badge/pytest%20-%20-green)](https://img.shields.io/badge)
-![tests](https://github.com/nervousapps/GPTenterprise/actions/workflows/tests.yaml/badge.svg)
-![documentation](https://github.com/nervousapps/GPTenterprise/actions/workflows/pdoc.yaml/badge.svg)
+[![Pylint](https://github.com/nervousapps/GPTenterprise/actions/workflows/pylint.yaml/badge.svg)](https://github.com/nervousapps/GPTenterprise/actions/workflows/pylint.yaml)
+[![Pytest](https://github.com/nervousapps/GPTenterprise/actions/workflows/tests.yaml/badge.svg)](https://github.com/nervousapps/GPTenterprise/actions/workflows/tests.yaml)
+[![Docs](https://github.com/nervousapps/GPTenterprise/actions/workflows/pdoc.yaml/badge.svg)](https://nervousapps.github.io/GPTenterprise/gpt_enterprise)
 
 First try on emulating an enterprise with OpenaAI GPT.
 
 This is basically a python package emulating an enterprise. It requests OpenaAI API and generate a sequence of tasks each associated to an employee. Employees are automatically generated (system prompts to tell GPT what employee to be) :brain:.
+
+## :night_with_stars: Summary
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [:artificial_satellite: About the enterprise (by GPT)](#artificial_satellite-about-the-enterprise-by-gpt)
+- [:pinched_fingers: Requirements](#pinched_fingers-requirements)
+- [:surfing_woman: Installation](#surfing_woman-installation)
+- [:unicorn: OpenAI key configuration](#unicorn-openai-key-configuration)
+- [:point_right: Quickstart v1](#point_right-quickstart-v1)
+- [:books: Documentation](#books-documentation)
+  - [:label: Environement variables (config file)](#label-environement-variables-config-file)
+- [:roller_coaster: Going further](#roller_coaster-going-further)
+- [:white_check_mark: Tests](#white_check_mark-tests)
+- [:recycle: Formatter](#recycle-formatter)
+- [:raccoon: Miscelleneous](#raccoon-miscelleneous)
+  - [:older_woman: Quickstart POC](#older_woman-quickstart-poc)
+- [:carousel_horse: Disclaimers](#carousel_horse-disclaimers)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## :artificial_satellite: About the enterprise (by GPT)
 <p>Our innovative company uses advanced artificial intelligence technology to bring products and services to the next level. Our employees are AI instances created with the powerful GPT language model that can perform various roles like engineers, designers, and even marketers. This enables us to develop products faster and more efficiently than traditional companies while also providing a unique experience for our customers.</p>
@@ -145,7 +165,7 @@ The final product can be found in the final_product field of the json object con
 - enhanced employees interactions
 - asynchronous operations
 - multi managers enterprise
-- keep previous responses in memory
+- keep previous responses in memory (maybe use https://github.com/acheong08/ChatGPT)
 - internet search (python only to avoid using openAI's token)
 
 ## :white_check_mark: Tests
@@ -185,3 +205,6 @@ To run the enterprise please do:
 ```bash
 python ./examples/webgpt.py
 ```
+
+## :carousel_horse: Disclaimers
+This is not an official OpenAI product. This is a personal project and it is not affiliated with OpenAI in any way.
