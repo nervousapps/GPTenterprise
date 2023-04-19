@@ -8,8 +8,8 @@
 [![python](https://img.shields.io/badge/Python-3.7-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![openai](https://img.shields.io/badge/openai%20-GPT-yellowgreen)](https://www.openai.com)
 [![pytest](https://img.shields.io/badge/pytest%20-%20-green)](https://img.shields.io/badge)
-![tests](https://github.com/nervousapps/GPTenterprise/actions/workflows/tests.yml/badge.svg)
-![documentation](https://github.com/nervousapps/GPTenterprise/actions/workflows/pdoc.yml/badge.svg)
+![tests](https://github.com/nervousapps/GPTenterprise/actions/workflows/tests.yaml/badge.svg)
+![documentation](https://github.com/nervousapps/GPTenterprise/actions/workflows/pdoc.yaml/badge.svg)
 
 First try on emulating an enterprise with OpenaAI GPT.
 
@@ -64,7 +64,16 @@ nano ./openai_key.txt
 
 
 ## :point_right: Quickstart v1
-To see an example of what can be done with the idea of GPTenterprise, tweek config file in order to give :superhero_man: CEO guidelines (and other parameters if you want but default one should be ok), and run:
+To see an example of what can be done with the idea of GPTenterprise : 
+
+1 - Tweek config file in order to give :superhero_man: CEO guidelines (and other parameters if you want but default one should be ok)
+
+```bash
+nano ./config
+```
+
+2 - Run the enterprise
+
 ```bash
 GPTenterprise ./config
 ```
@@ -74,9 +83,9 @@ The manager will make a plan, with all employees to hire and the sequences of ta
 
 ## :books: Documentation
 
-Documentation generated with [PDOC](https://pdoc.dev/)
+[HTML documentation here](https://nervousapps.github.io/GPTenterprise/gpt_enterprise).
 
-[HTML documentation here](https://nervousapps.github.io/GPTenterprise/gpt_enterprise/employee.html).
+Documentation generated with [PDOC](https://pdoc.dev/)
 
 An enterprise is composed of a manager (only one for now) and employees.
 At the beginning, the CEO will create the enterprise giving his guidelines to the manager.
@@ -129,9 +138,9 @@ The final product can be found in the final_product field of the json object con
 | MANAGER_RETRY                  | How many times manager will retry to do the plans if failing          | 1               |
 | CUSTOM_MANAGER_PROMPTS_PATH    | Give a custom manager prompt (be careful to keep objects structure definitions) | ""              |
 | CEO_GUIDELINES                 | "As a CEO, I want ..."                                         | "As a CEO, I want ..." |
-| INTERACTIVE                    | Wait for uer entry (basic for now)                                        | "no" |
+| INTERACTIVE                    | Wait for user entry (basic for now)                                        | "no" |
 
-## Going further
+## :roller_coaster: Going further
 - rework manager prompt
 - enhanced employees interactions
 - asynchronous operations
