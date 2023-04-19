@@ -80,10 +80,10 @@ class Employee:
         self.name = name
         self.emoji = emoji
         try:
-            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
+            print(f&#34;\n {self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.\n&#34;)
         except Exception:
             self.emoji = &#34;\U0001F469&#34;
-            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
+            print(f&#34;\n {self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.\n&#34;)
         self.creativity = creativity
         self.gpt_version = gpt_version
 
@@ -107,9 +107,9 @@ class Employee:
             )
             response = response.choices[0].message.content
         except Exception as err:
-            print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+            print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
         print(
-            f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+            f&#34;\n {self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}\n&#34;
         )
         return response
 
@@ -144,9 +144,9 @@ class Employee:
                 nb_image=nb_image,
             )
         except Exception as err:
-            print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+            print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
         print(
-            f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+            f&#34;\n {self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths} \n&#34;
         )
         return prompt, image_paths</code></pre>
 </details>
@@ -233,10 +233,10 @@ It can be used to do all you want, just tell him how to act.</p>
         self.name = name
         self.emoji = emoji
         try:
-            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
+            print(f&#34;\n {self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.\n&#34;)
         except Exception:
             self.emoji = &#34;\U0001F469&#34;
-            print(f&#34;{self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.&#34;)
+            print(f&#34;\n {self.emoji} Hi, I&#39;m a {self.role_name}, my name is {self.name}.\n&#34;)
         self.creativity = creativity
         self.gpt_version = gpt_version
 
@@ -260,9 +260,9 @@ It can be used to do all you want, just tell him how to act.</p>
             )
             response = response.choices[0].message.content
         except Exception as err:
-            print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+            print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
         print(
-            f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+            f&#34;\n {self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}\n&#34;
         )
         return response
 
@@ -297,9 +297,9 @@ It can be used to do all you want, just tell him how to act.</p>
                 nb_image=nb_image,
             )
         except Exception as err:
-            print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+            print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
         print(
-            f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+            f&#34;\n {self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths} \n&#34;
         )
         return prompt, image_paths</code></pre>
 </details>
@@ -362,9 +362,9 @@ The employee will generate a prompt and ask DALL-E to generate the specified num
             nb_image=nb_image,
         )
     except Exception as err:
-        print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+        print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
     print(
-        f&#34;{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}&#34;
+        f&#34;\n {self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths} \n&#34;
     )
     return prompt, image_paths</code></pre>
 </details>
@@ -408,9 +408,9 @@ The employee will generate a prompt and ask DALL-E to generate the specified num
         )
         response = response.choices[0].message.content
     except Exception as err:
-        print(f&#34;{self.emoji} {self.name}: {err}&#34;)
+        print(f&#34;\n {self.emoji} {self.name}: {err}\n&#34;)
     print(
-        f&#34;{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}&#34;
+        f&#34;\n {self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}\n&#34;
     )
     return response</code></pre>
 </details>

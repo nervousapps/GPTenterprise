@@ -51,10 +51,14 @@ class Employee:
         self.name = name
         self.emoji = emoji
         try:
-            print(f"{self.emoji} Hi, I'm a {self.role_name}, my name is {self.name}.")
+            print(
+                f"\n {self.emoji} Hi, I'm a {self.role_name}, my name is {self.name}.\n"
+            )
         except Exception:
             self.emoji = "\U0001F469"
-            print(f"{self.emoji} Hi, I'm a {self.role_name}, my name is {self.name}.")
+            print(
+                f"\n {self.emoji} Hi, I'm a {self.role_name}, my name is {self.name}.\n"
+            )
         self.creativity = creativity
         self.gpt_version = gpt_version
 
@@ -78,9 +82,9 @@ class Employee:
             )
             response = response.choices[0].message.content
         except Exception as err:
-            print(f"{self.emoji} {self.name}: {err}")
+            print(f"\n {self.emoji} {self.name}: {err}\n")
         print(
-            f"{self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}"
+            f"\n {self.emoji} {self.name}: As a {self.role_name}, here is my work: {response}\n"
         )
         return response
 
@@ -115,8 +119,8 @@ class Employee:
                 nb_image=nb_image,
             )
         except Exception as err:
-            print(f"{self.emoji} {self.name}: {err}")
+            print(f"\n {self.emoji} {self.name}: {err}\n")
         print(
-            f"{self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths}"
+            f"\n {self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths} \n"
         )
         return prompt, image_paths

@@ -18,7 +18,13 @@ class Manager:
     The manager will hire employees and plan tasks to achieve CEO guidelines inside the given enterprise.
     """
 
-    def __init__(self, ceo_guidelines: str, manager_retry: int, output_directory: str, interactive: bool = False):
+    def __init__(
+        self,
+        ceo_guidelines: str,
+        manager_retry: int,
+        output_directory: str,
+        interactive: bool = False,
+    ):
         """_summary_
 
         Args:
@@ -52,7 +58,9 @@ class Manager:
         """
         for _ in range(self.manager_retry):
             try:
-                print(f"\U0001F646 Hey, I'm doing plans to achieve your guidelines !")
+                print(
+                    f"\n \U0001F646 Hey, I'm doing plans to achieve your guidelines !\n"
+                )
                 response = generate_text(
                     system_prompt=self.role,
                     user_prompt=self.ceo_guidelines,
@@ -60,8 +68,14 @@ class Manager:
                     temperature=1.0,
                 )
                 plan = ast.literal_eval(response.choices[0].message.content)
+                plan["ceo_guidelines"] = self.ceo_guidelines
                 if self.interactive:
-                    if "y" in input(f"\U0001F646 Is that plan good for you : {plan} ?").lower():
+                    if (
+                        "y"
+                        in input(
+                            f"\n \U0001F646 Is that plan good for you : {plan} ?"
+                        ).lower()
+                    ):
                         return plan
                     else:
                         continue
@@ -70,9 +84,9 @@ class Manager:
             except Exception as err:
                 print(err)
                 print(
-                    f"\U0001F646 I've messed up, retrying to plan tasks... {response.choices[0].message.content}"
+                    f"\n \U0001F646 I've messed up, retrying to plan tasks... {response.choices[0].message.content}\n"
                 )
-        print("\U0001F646 I've messed up, I'm not able to do this...")
+        print("\n \U0001F646 I've messed up, I'm not able to do this...\n")
 
     def hire_employees(self, employees_to_hire: List[object]) -> Dict:
         """
@@ -81,7 +95,7 @@ class Manager:
         Args:
             employee (List[object]): _description_
         """
-        print(f"\U0001F646 Hey, I've hired employees ! Please welcome :")
+        print(f"\n \U0001F646 Hey, I've hired employees ! Please welcome :\n")
         hired_employees = {}
         for employee in employees_to_hire:
             hired_employees[employee["name"]] = Employee(
@@ -114,7 +128,7 @@ class Manager:
         Returns:
             Dict: Production of the team !
         """
-        print(f"\U0001F646 Hey, I'm doing plan, just wait for the result !")
+        print(f"\n \U0001F646 Hey, I'm doing plan, just wait for the result !\n")
         employee_work = None
         for index, task in enumerate(tasks):
             # TODO: Try to rework the task given the previous task's result
@@ -139,14 +153,20 @@ class Manager:
             #     )
             #     task = ast.literal_eval(response.choices[0].message.content)
             if self.interactive:
-                if "y" not in input(
-                    f"\U0001F646 Ask {task['employee']} to go on with the task \n {task} ?"
-                ).lower():
+                if (
+                    "y"
+                    not in input(
+                        f"\U0001F646 Ask {task['employee']} to go on with the task \n {task} ?"
+                    ).lower()
+                ):
                     task["result"] = employee_work
                     continue
             if task["type"] == "image":
                 employee_work = employees[task["employee"]].ask_image(
-                    task["todo"], output_directory=self.output_directory
+                    manager_request=task["todo"],
+                    output_directory=self.output_directory,
+                    base_name="img",
+                    nb_image=1,
                 )
             if task["type"] == "text":
                 # Add the previous employee work to the current task to

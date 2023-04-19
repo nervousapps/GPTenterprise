@@ -20,7 +20,7 @@ class Enterprise:
         output_directory: str,
         manager_retry: int,
         company_name: str = "GPTenterprise",
-        interactive: bool = False
+        interactive: bool = False,
     ):
         """
         Create an enterprise with CEO guidelines and hire a manager.
@@ -52,7 +52,7 @@ class Enterprise:
             ceo_guidelines=guidelines,
             manager_retry=manager_retry,
             output_directory=output_directory,
-            interactive=interactive
+            interactive=interactive,
         )
 
     def run_enterprise(self) -> dict:
@@ -84,7 +84,12 @@ class Enterprise:
         # Add final result
         manager_plans["final_result"] = production_tasks_board[-1]["result"]
         if self.interactive:
-            if "y" in input(f"{self.manager.emoji} Here is the final result: \n {manager_plans['final_result']} \n Is this final result correct? (y/n) \n \U0001F468").lower():
+            if (
+                "y"
+                in input(
+                    f"{self.manager.emoji} Here is the final result: \n {manager_plans['final_result']} \n Is this final result correct? (y/n) \n \U0001F468"
+                ).lower()
+            ):
                 print(f"{self.manager.emoji} Great ! Nice to have worked with you !")
             else:
                 if "y" in input("Do you want me to retry ? (y/n)\n \U0001F468").lower():

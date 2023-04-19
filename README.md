@@ -2,7 +2,7 @@
 GPTenterprise :zzz: :robot:
 </h1>
 <h1 align="center">
-<img width="200" src="./html/gpt_enterprise/logo.png" alt="GPTenterprise">
+<img width="200" src="./logo.png" alt="GPTenterprise">
 </h1>
 
 [![python](https://img.shields.io/badge/Python-3.7-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
@@ -11,7 +11,7 @@ GPTenterprise :zzz: :robot:
 
 First try on emulating an enterprise with OpenaAI GPT.
 
-This is basically python utilities to connect to OpenaAI API and generate content with variety of system prompts to tell GPT what employee to be :brain:.
+This is basically a python package emulating an enterprise. It requests OpenaAI API and generate a sequence of task with a variety of system prompts to tell GPT what employee to be :brain:.
 
 ## :artificial_satellite: About the enterprise (by GPT)
 <p>Our innovative company uses advanced artificial intelligence technology to bring products and services to the next level. Our employees are AI instances created with the powerful GPT language model that can perform various roles like engineers, designers, and even marketers. This enables us to develop products faster and more efficiently than traditional companies while also providing a unique experience for our customers.</p>
@@ -64,7 +64,7 @@ nano ./openai_key.txt
 ## :point_right: Quickstart v1
 To see an example of what can be done with the idea of GPTenterprise, tweek config file in order to give :superhero_man: CEO guidelines (and other parameters if you want but default one should be ok), and run:
 ```bash
-gpt_enterprise ./config
+GPTenterprise ./config
 ```
 
 Then the enterprise will be created with your guidelines and a manager will be hired. He will do his best to achieve guidelines.
@@ -108,7 +108,7 @@ Plans structure
 }
 ```
 
-The final product can be found in the final_product field of the json object contained in production file in the specified output directory.
+The final product can be found in the final_product field of the json object contained in "production_<company_name>.json" file in the specified output directory.
 
 
 ### Environement variables (config file)
@@ -139,6 +139,8 @@ pytest
 - asynchronous operations
 - multi managers enterprise
 - keep previous responses in memory
+- internet search (python only to avoid using openAI's token)
+
 
 
 ## :raccoon: Miscelleneous
