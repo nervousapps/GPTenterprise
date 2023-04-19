@@ -1,0 +1,27 @@
+name: tests
+
+# test whenever there are new commits on master
+on:
+  push:
+    branches:
+      - master
+    # Alternative: only build for tags.
+    # tags:
+    #   - '*'
+
+# security: restrict permissions for CI jobs.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - run: pip install ./python
+      - run: pip install -r ./python/requirements-tests.txt
+      - run: pytest

@@ -1,6 +1,6 @@
 name: website
 
-# build the documentation whenever there are new commits on main
+# build the documentation whenever there are new commits on master
 on:
   push:
     branches:
@@ -28,7 +28,7 @@ jobs:
       - run: pip install -r ./python/requirements-docs.txt
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pdoc gpt_enterprise -o docs/
+      - run: pdoc gpt_enterprise -o docs/ --logo ./logo.png
 
       - uses: actions/upload-pages-artifact@v1
         with:

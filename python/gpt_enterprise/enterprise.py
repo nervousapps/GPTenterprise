@@ -10,6 +10,7 @@ from gpt_enterprise.manager import Manager
 
 class Enterprise:
     """
+    \U0001F3E2
     An enterprise is composed of several employees driven by managers and a CEO (you)
     """
 

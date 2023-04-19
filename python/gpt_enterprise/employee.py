@@ -8,6 +8,7 @@ from gpt_enterprise.gpt_utils import generate_text, generate_image
 
 class Employee:
     """
+    "\U0001F469"
     The Employee class represents an employee that act as the given system prompt.
     It can be used to do all you want, just tell him how to act.
     """
@@ -42,7 +43,8 @@ class Employee:
             self.role = role_prompt
         else:
             print(
-                "Your employee role prompt is not clear, please provide a role_filename or a role_prompt. He will just be a helpfull amployee."
+                "Your employee role prompt is not clear, please provide a role_filename or a role_prompt. "
+                "He will just be a helpfull amployee."
             )
             self.role = "You are a helpfull employee."
         self.role_name = role_name
@@ -97,7 +99,8 @@ class Employee:
     ) -> Tuple[str, List[str]]:
         """
         Ask the employee to create an image with the specified manager request.
-        The employee will generate a prompt and ask DALL-E to generate the specified number of images.
+        The employee will generate a prompt and ask DALL-E to generate the specified 
+        number of images.
 
         Args:
             manager_request (str): The manager request (it can be rude... but may not ^^)
@@ -121,6 +124,8 @@ class Employee:
         except Exception as err:
             print(f"\n {self.emoji} {self.name}: {err}\n")
         print(
-            f"\n {self.emoji} {self.name}: As a {self.role_name} image generator, here is the image description I made: {prompt}. \n Image paths are {image_paths} \n"
+            f"\n {self.emoji} {self.name}: As a {self.role_name} "
+            f"image generator, here is the image description I made: {prompt}. \n "
+            f"Image paths are {image_paths} \n"
         )
         return prompt, image_paths
