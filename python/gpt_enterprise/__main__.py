@@ -3,13 +3,14 @@ GPTenterprise is an AI driven enterprise.
 """
 import os
 import sys
+import asyncio
 import json
 from dotenv import load_dotenv
 from gpt_enterprise.enterprise import Enterprise
 
 
 def main():
-    load_dotenv(dotenv_path=sys.argv[1])
+    load_dotenv("./configCustom")  # sys.argv[1])
 
     interactive = os.getenv("INTERACTIVE") == "yes"
     keyfile = os.getenv("KEYFILE")
@@ -18,7 +19,7 @@ def main():
     output_directory = os.getenv("OUTPUT_DIRECTORY")
     manager_retry = int(os.getenv("MANAGER_RETRY"))
 
-    # With interactive mode, change variables with user input
+    # Interactive mode, change variables with user input
     if interactive:
         keyfile = input(f"Path of OpenAI key file ? {keyfile}") or keyfile
         print(f"\n \U0001F511 \t {keyfile} \n")
@@ -38,7 +39,12 @@ def main():
             or manager_retry
         )
         print(f"\n \U0001F9EC \t {manager_retry} \n")
-        guidelines = input(f"What are your guidelines ? {guidelines}") or guidelines
+        guidelines = (
+            input(
+                f"What are your guidelines ? If not provided, config guidelines will be used. \n"
+            )
+            or guidelines
+        )
         print(f"\n \U0001F489 \t {guidelines} \n")
 
     # Create the enterprise
@@ -52,7 +58,7 @@ def main():
     )
 
     # Run the enterprise and go into production !
-    production = enterprise.run_enterprise()
+    production = asyncio.run(enterprise.run_enterprise())
     # Write the production in a JSON file
     with open(
         os.path.join(output_directory, f"production_{company_name}.json"), "w"

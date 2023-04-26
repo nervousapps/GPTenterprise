@@ -18,7 +18,7 @@ setup(
     packages=find_packages(),
     package_data={
         # If any package contains *.txt or *.rst files, include them:
-        "": ["*.txt", "./*_prompts/*.txt"],
+        "": ["*.txt", "./prompts/*/*.txt"],
     },
     include_package_data=True,
     install_requires=REQUIREMENTS,
@@ -27,5 +27,5 @@ setup(
             "GPTenterprise = gpt_enterprise:main",
         ],
     },
-    python_requires=">= 3.7",
+    python_requires=">= 3.9",
 )

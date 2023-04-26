@@ -24,4 +24,23 @@ jobs:
 
       - run: pip install ./python
       - run: pip install -r ./python/requirements-tests.txt
-      - run: pytest
+      - run: pytest --color=yes --cov=./ --cov-report=term --cov-report=html
+
+  #     - uses: actions/upload-pages-artifact@v1
+  #       with:
+  #         path: htmlcov/
+
+  # # Deploy the artifact to GitHub pages.
+  # # This is a separate job so that only actions/deploy-pages has the necessary permissions.
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   steps:
+  #     - id: deployment
+  #       uses: actions/deploy-pages@v2

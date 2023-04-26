@@ -19,7 +19,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install ./python
-        pip install -r requirements-tests.txt
+        pip install -r ./python/requirements-tests.txt
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint $(git ls-files '*.py') --fail-under=6

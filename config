@@ -1,15 +1,23 @@
-COMPANY_NAME=WebGPT
+# OpenAI stuff
 KEYFILE=./openai_key.txt
+GPT_VERSION="gpt-3.5-turbo"
+
+# General
+INTERACTIVE="no"
+ASYNCHRONOUS="yes"
+
+# Enterprise
+COMPANY_NAME=WebGPT
 OUTPUT_DIRECTORY=./generated/WebGPT
+
+# Managers (team leader and scrum master)
 MANAGER_RETRY=5
 CUSTOM_MANAGER_PROMPTS_PATH=""
-INTERACTIVE="no"
 
-
+# CEO
 CEO_GUIDELINES="As a CEO, I want a website page that review the raspberry pi. 
 The webpage must be clear and human friendly, with colors, emojis, and use the latest technologies like bootstrap 5. 
 The webpage must contains images relating to the subject.
 I can afford 3 employees, make less tasks as possible. 
 One task must be an image task on the subjet of the webite.
 PRODUCT must be only html code, beginning with <!DOCTYPE html> and ending with </html>."
-

@@ -3,6 +3,7 @@
 Employee
 \U0001F469
 """
+import os
 from typing import List, Tuple
 
 from gpt_enterprise.gpt_utils import generate_text, generate_image
@@ -22,7 +23,7 @@ class Employee:
         name: str = "GUY",
         emoji: str = "\U0001F469",
         creativity: float = 1.0,
-        gpt_version: str = "gpt-3.5-turbo",
+        gpt_version: str = os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
     ):
         """
         Give your employee a role file for him to read it and act like you want.
@@ -112,7 +113,7 @@ class Employee:
         Returns:
             Tuple[str, List[str]]: The generated prompt and list of images paths
         """
-        prompt = ("",)
+        prompt = ""
         image_paths = []
         try:
             prompt, image_paths = generate_image(

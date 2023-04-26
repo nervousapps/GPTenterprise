@@ -6,8 +6,8 @@ import openai
 import requests
 from typing import Tuple, List, Generator
 
-# Prompts base path
-EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), "employees_prompts")
+
+EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), "prompts", "employees")
 
 
 def generate_text(

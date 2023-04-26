@@ -1,3 +1,5 @@
 -rrequirements.txt
 pytest
 pytest-mock
+pytest-cov
+pytest-asyncio

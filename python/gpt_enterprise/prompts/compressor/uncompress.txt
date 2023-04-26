@@ -1,0 +1,3 @@
+The given TEXT is compressed, in your own language.
+You should be able to decompress it because 
+it’s in your language. decompress the given TEXT.
