@@ -1,5 +1,5 @@
 # OpenAI stuff
-KEYFILE=./openai_key.txt
+KEYFILE="./openai_key.txt"
 GPT_VERSION="gpt-3.5-turbo"
 
 # General
@@ -7,8 +7,8 @@ INTERACTIVE="no"
 ASYNCHRONOUS="yes"
 
 # Enterprise
-COMPANY_NAME=WebGPT
-OUTPUT_DIRECTORY=./generated/WebGPT
+COMPANY_NAME="WebGPT"
+OUTPUT_DIRECTORY="./generated/WebGPT"
 
 # Managers (team leader and scrum master)
 MANAGER_RETRY=5

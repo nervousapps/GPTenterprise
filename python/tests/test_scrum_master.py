@@ -41,6 +41,7 @@ async def test_plan_tasks(mocker, scrum_master_test, fake_employees, plan_path, 
         assert plan
 
 
+# TODO: add parametrize with test files
 def test_do_plan(mocker, scrum_master_test, fake_employees):
     # Mock function and method that requests openai API (to avoid costs)
     mocker.patch(
@@ -61,6 +62,7 @@ def test_do_plan(mocker, scrum_master_test, fake_employees):
     assert production
 
 
+# TODO: add parametrize with test files
 @pytest.mark.asyncio
 async def test_do_plan_async(mocker, scrum_master_test, fake_employees):
     # Mock function and method that requests openai API (to avoid costs)

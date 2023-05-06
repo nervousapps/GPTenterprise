@@ -5,6 +5,7 @@ import os
 import ast
 import asyncio
 import time
+import pytest
 from typing import Tuple, List
 from gpt_enterprise.enterprise import Enterprise
 from gpt_enterprise.employee import Employee
@@ -30,7 +31,25 @@ def test_enterprise():
     assert enterprise.scrum_master.manager_retry == 1
 
 
-def test_run_enterprise(mocker):
+@pytest.mark.parametrize(
+    "employees_path",
+    [
+        os.path.join(EMPLOYEES_FILES_DIR, "employees.txt"),
+        os.path.join(EMPLOYEES_FILES_DIR, "looping_employees.txt"),
+        # os.path.join(EMPLOYEES_FILES_DIR, "employees_malformed_json.txt"),
+        # os.path.join(EMPLOYEES_FILES_DIR, "employees_wrong_fields.txt"),
+    ],
+)
+@pytest.mark.parametrize(
+    "tasks_path",
+    [
+        os.path.join(TASKS_FILES_DIR, "tasks.txt"),
+        os.path.join(TASKS_FILES_DIR, "looping_tasks.txt"),
+        # os.path.join(TASKS_FILES_DIR, "tasks_malformed_json.txt"),
+        # os.path.join(TASKS_FILES_DIR, "tasks_wrong_fields.txt"),
+    ],
+)
+def test_run_enterprise(mocker, employees_path, tasks_path):
     """
     Test to run a fake enterprise
     """
@@ -38,7 +57,7 @@ def test_run_enterprise(mocker):
     def mock_generate_text(
         system_prompt: str, user_prompt: str, model: str, temperature: float
     ) -> str:
-        time.sleep(1)  # random.random()*10)
+        time.sleep(0.1)  # random.random()*10)
         return mock_open_ai_response_object(mocker=mocker, content="Do something")
 
     def mock_generate_image(
@@ -48,34 +67,32 @@ def test_run_enterprise(mocker):
         system_prompt: str = "",
         nb_image: int = 1,
     ) -> Tuple[str, List[str]]:
-        time.sleep(1)  # random.random()*10)
+        time.sleep(0.1)  # random.random()*10)
         return ("Test", ["img1.jpg"])
 
     # Mock function and method that requests openai API (to avoid costs)
     mocker.patch("gpt_enterprise.employee.generate_text", mock_generate_text)
     mocker.patch("gpt_enterprise.employee.generate_image", mock_generate_image)
+
     # Use a previously generated employees list (to avoid costs)
-    with open(os.path.join(EMPLOYEES_FILES_DIR, "employees.txt"), "r") as file:
-        employees = ast.literal_eval(file.read())
-        hired_employees = {}
-        for employee in employees:
-            hired_employees[employee["name"]] = Employee(
-                role_prompt=employee["role"],
-                name=employee["name"],
-                role_name=employee["role_name"],
-                creativity=float(employee["creativity"]),
-                emoji=employee["emoji"],
-            )
-    mocker.patch(
-        "gpt_enterprise.team_leader.TeamLeader.hire_employees",
-        return_value=hired_employees,
-    )
+    def mock_sm_generate_text(
+        system_prompt: str, user_prompt: str, model: str, temperature: float
+    ) -> str:
+        time.sleep(0.1)  # random.random()*10)
+        with open(tasks_path, "r") as file:
+            return mock_open_ai_response_object(mocker=mocker, content=file.read())
+
+    mocker.patch("gpt_enterprise.scrum_master.generate_text", mock_sm_generate_text)
+
     # Use a previously generated plan_tasks (to avoid costs)
-    with open(os.path.join(TASKS_FILES_DIR, "tasks.txt"), "r") as file:
-        plan_tasks = ast.literal_eval(file.read())
-    mocker.patch(
-        "gpt_enterprise.scrum_master.ScrumMaster.plan_tasks", return_value=plan_tasks
-    )
+    def mock_tl_generate_text(
+        system_prompt: str, user_prompt: str, model: str, temperature: float
+    ) -> str:
+        time.sleep(0.1)  # random.random()*10)
+        with open(employees_path, "r") as file:
+            return mock_open_ai_response_object(mocker=mocker, content=file.read())
+
+    mocker.patch("gpt_enterprise.team_leader.generate_text", mock_tl_generate_text)
 
     # Run asynchronously
     enterprise_async = Enterprise(
@@ -95,12 +112,6 @@ def test_run_enterprise(mocker):
     assert all(task.get("result") for task in production_async.get("tasks"))
 
     # Run sequentially
-    # Use a previously generated plan (to avoid costs)
-    with open(os.path.join(TASKS_FILES_DIR, "tasks.txt"), "r") as file:
-        plan_tasks = ast.literal_eval(file.read())
-    mocker.patch(
-        "gpt_enterprise.scrum_master.ScrumMaster.plan_tasks", return_value=plan_tasks
-    )
     enterprise_seq = Enterprise(
         keyfile=os.path.join(
             os.path.dirname(__file__), "..", "..", "openai_key.txt.template"

@@ -4,6 +4,7 @@ Enterprise
 \U0001F3E2
 """
 import os
+import time
 import openai
 
 from gpt_enterprise.team_leader import TeamLeader
@@ -119,4 +120,5 @@ class Enterprise:
                     or "no"
                 ):
                     return await self.run_enterprise()
+
         return production

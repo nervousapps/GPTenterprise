@@ -8,7 +8,7 @@ import ast
 import json
 from typing import List, Dict
 
-from gpt_enterprise.gpt_utils import generate_text
+from gpt_enterprise.gpt_utils import generate_text, EMPLOYEE_PROMPTS_PATH
 from gpt_enterprise.employee import Employee
 
 
@@ -59,6 +59,7 @@ class TeamLeader:
         Returns:
             List[Dict[str, Employee]]: A list containing employee CV by employee name
         """
+        employees_to_hire = None
         for _ in range(self.manager_retry):
             try:
                 print(
@@ -66,7 +67,7 @@ class TeamLeader:
                 )
                 response = generate_text(
                     system_prompt=self.role,
-                    user_prompt=self.ceo_guidelines,
+                    user_prompt=f"Here are the CEO guidelines : {self.ceo_guidelines}",
                     model=os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
                     temperature=1.0,
                 )
@@ -78,7 +79,7 @@ class TeamLeader:
                 if self.interactive:
                     if "y" in (
                         input(
-                            f"\n {self.emoji} Is these employees good for you ?"
+                            f"\n {self.emoji} Are these employees good for you ?"
                         ).lower()
                         or "y"
                     ):
@@ -90,16 +91,23 @@ class TeamLeader:
                 print(
                     f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {response.choices[0].message.content}\n"
                 )
-        print(f"\n {self.emoji} Hey, I've hired employees ! Please welcome :\n")
+                raise err
+        print(f"\n Ok, I've hired them ! Please welcome :\n")
         hired_employees = {}
-        for employee in employees_to_hire:
-            hired_employees[employee["name"]] = Employee(
-                role_prompt=employee["role"],
-                name=employee["name"],
-                role_name=employee["role_name"],
-                creativity=float(employee["creativity"]),
-                emoji=employee["emoji"],
-            )
+        if employees_to_hire:
+            for employee in employees_to_hire:
+                hired_employees[employee["name"]] = Employee(
+                    role_prompt=employee["role"],
+                    name=employee["name"],
+                    role_name=employee["role_name"],
+                    creativity=float(employee["creativity"]),
+                    emoji=employee["emoji"],
+                )
+        # Add a helpful employee for task assigned to a non hired one
+        hired_employees["helpful"] = Employee(
+            role_filename=os.path.join(EMPLOYEE_PROMPTS_PATH, "helpful_employee.txt"),
+            role_name="Helpful employee",
+        )
         return hired_employees
 
     def fire_employees(self, employees_to_fire: List[Employee]):

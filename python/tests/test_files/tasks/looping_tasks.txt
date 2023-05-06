@@ -1,0 +1,51 @@
+[
+    {
+        "task_name": "Create 5 images propositions for the album cover",
+        "employee_name": "Janet",
+        "todo": "Acid house music album cover propositions NB_IMAGES 5. The employee must create 5 different images propositions for the cover. These propositions must be in correlation with the acid house music style. EXAMPLE: Example of an acidic image proposition https://miditext.com/acidicImage.jpg",
+        "type": "image",
+        "requirements": 1
+    },
+    {
+        "task_name": "Compose a bass track",
+        "employee_name": "Sophia",
+        "todo": "Acid house music album bass track. The employee must produce a bass track of at least 3 minutes long. This track must be in correlation with the acid house music style.",
+        "type": "text",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Compose a lead guitar track",
+        "employee_name": "Oliver",
+        "todo": "Acid house music album lead guitar track. The employee must produce a lead guitar track of at least 3 minutes long. This track must be in correlation with the acid house music style.",
+        "type": "text",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Compose a keyboard track",
+        "employee_name": "Eva",
+        "todo": "Acid house music album keyboard track. The employee must produce a keyboard track of at least 3 minutes long. This track must be in correlation with the acid house music style.",
+        "type": "text",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Compose a drum track",
+        "employee_name": "Max",
+        "todo": "Acid house music album drum track. The employee must produce a drum track of at least 3 minutes long. This track must be in correlation with the acid house music style.",
+        "type": "text",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Produce the tracks into an album",
+        "employee_name": "David",
+        "todo": "Acid house music album. The employee must interact with each musician to put together the bass, lead guitar, keyboard and drum track composed by  Sophie, Oliver, Eva and Max. The result must be an acid house music album of 4 songs each of at least 3 minutes long each. The mixing must be done in a way that music flow to immerse the listener in the acid house music style.",
+        "type": "text",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Write the text for the physical and digital album cover",
+        "employee_name": "GUY",
+        "todo": "Acid house music album cover text. The employee must write the album title, artist name, song titles and any legal informations for distribution. The album title must be 'Acid Soul'. Song titles: 1. Galaxy eyes. 2. Acid waves. 3. Close encounter. 4. Cosmic dance. Legal informations: 'All songs composed by MidiText. \u00a92021 MidiText. All rights reserved. Unauthorized reproduction prohibited'",
+        "type": "text",
+        "requirements": 0
+    }
+]

@@ -1,5 +1,7 @@
 """
+\U0001F9E0
 GPT utils
+\U0001F9E0
 """
 import os
 import openai

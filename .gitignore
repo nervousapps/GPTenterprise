@@ -6,5 +6,6 @@ openai_key.txt
 generated
 gptenterprise*
 base_site
-html
+html*
 config*
+.coverage

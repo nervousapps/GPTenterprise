@@ -10,14 +10,17 @@ from .conftest import EMPLOYEES_FILES_DIR, mock_open_ai_response_object
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "plan_path, nb_employees, fail",
+    "employees_path, nb_employees, fail",
     [
         (os.path.join(EMPLOYEES_FILES_DIR, "employees.txt"), 3, False),
+        (os.path.join(EMPLOYEES_FILES_DIR, "looping_employees.txt"), 6, False),
         (os.path.join(EMPLOYEES_FILES_DIR, "employees_malformed_json.txt"), None, True),
         (os.path.join(EMPLOYEES_FILES_DIR, "employees_wrong_fields.txt"), None, True),
     ],
 )
-async def test_hire_employees(mocker, team_leader_test, plan_path, nb_employees, fail):
+async def test_hire_employees(
+    mocker, team_leader_test, employees_path, nb_employees, fail
+):
     """
     Test manager
     """
@@ -26,7 +29,7 @@ async def test_hire_employees(mocker, team_leader_test, plan_path, nb_employees,
         system_prompt: str, user_prompt: str, model: str, temperature: float
     ) -> str:
         # Use a previously generated plan (to avoid costs)
-        with open(plan_path, "r") as file:
+        with open(employees_path, "r") as file:
             generated_text = file.read()
             return mock_open_ai_response_object(mocker=mocker, content=generated_text)
 
@@ -38,4 +41,4 @@ async def test_hire_employees(mocker, team_leader_test, plan_path, nb_employees,
     else:
         hired_employees = team_leader_test.hire_employees()
         assert hired_employees
-        assert len(hired_employees.items()) == nb_employees
+        assert len(hired_employees.items()) == nb_employees + 1  # helpful employee

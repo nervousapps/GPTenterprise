@@ -184,6 +184,9 @@ An example can be given with the keyword "EXAMPLE:", it will be added to employe
 - keep previous responses in memory (maybe use https://github.com/acheong08/ChatGPT)
 - internet search (python only to avoid using openAI's token)
 - use https://python.langchain.com/en/latest/index.html to simplify code
+- DAN and other modes
+- add stream mode
+- add rework task stage
 
 ## :white_check_mark: Tests
 1 - Install tests requirements

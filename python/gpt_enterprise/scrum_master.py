@@ -67,6 +67,7 @@ class ScrumMaster:
         hired_employees = [
             {"name": employee.name, "role_name": employee.role_name}
             for employee in employees
+            if employee.name != "GUY"
         ]
         self.ceo_guidelines += f"AVAILABLE_EMPLOYEES: {hired_employees}"
         for _ in range(self.manager_retry):
@@ -76,7 +77,7 @@ class ScrumMaster:
                 )
                 response = generate_text(
                     system_prompt=self.role,
-                    user_prompt=self.ceo_guidelines,
+                    user_prompt=f"Here are the CEO guidelines : {self.ceo_guidelines}",
                     model=os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
                     temperature=1.0,
                 )
@@ -129,7 +130,11 @@ class ScrumMaster:
                         or "y"
                     ):
                         continue
-                    self._employee_task(index, task, employees[task["employee_name"]])
+                    self._employee_task(
+                        index,
+                        task,
+                        employees.get(task["employee_name"], employees.get("helpful")),
+                    )
                 # Do tasks that requires result of other tasks
                 elif (
                     "no" not in str(task.get("requirements", "no"))
@@ -148,7 +153,11 @@ class ScrumMaster:
                         or "y"
                     ):
                         continue
-                    self._employee_task(index, task, employees[task["employee_name"]])
+                    self._employee_task(
+                        index,
+                        task,
+                        employees.get(task["employee_name"], employees.get("helpful")),
+                    )
         return self.tasks
 
     async def do_plan_async(
@@ -178,7 +187,7 @@ class ScrumMaster:
                             self._wait_for_result,
                             task_index,
                             task,
-                            employees[employee_name],
+                            employees.get(employee_name, employees.get("helpful")),
                         )
                     )
             else:
@@ -187,7 +196,7 @@ class ScrumMaster:
                         self._wait_for_result,
                         task_index,
                         task,
-                        employees[task["employee_name"]],
+                        employees.get(task["employee_name"], employees.get("helpful")),
                     )
                 )
         # Run all futures in parallel
@@ -241,13 +250,13 @@ class ScrumMaster:
             # Get number of images to ask from the task todo
             nb_image = 2
             if "NB_IMAGES" in todo:
-                nb_image = int(todo.split("NB_IMAGES")[1][-1])
+                nb_image = int(todo.split("NB_IMAGES")[1][1])
                 todo = todo.split("NB_IMAGES")[0]
             task["result"] = employee.ask_image(
                 manager_request=todo,
                 output_directory=self.output_directory,
                 base_name=employee.name,
-                nb_image=max(nb_image, 5),
+                nb_image=min(nb_image, 5),
             )
         elif task["type"] == "text":
             task["result"] = employee.ask_task(todo)
