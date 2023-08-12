@@ -9,3 +9,4 @@ base_site
 html*
 config*
 .coverage
+*.egg-info

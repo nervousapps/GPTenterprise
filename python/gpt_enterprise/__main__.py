@@ -7,17 +7,39 @@ import asyncio
 import json
 from dotenv import load_dotenv
 from gpt_enterprise.enterprise import Enterprise
+from gpt_enterprise.llm_utils import LLMutils
 
 
 def main():
     load_dotenv("./configCustom")  # sys.argv[1])
 
     interactive = os.getenv("INTERACTIVE") == "yes"
-    keyfile = os.getenv("KEYFILE")
     company_name = os.getenv("COMPANY_NAME")
     guidelines = os.getenv("CEO_GUIDELINES")
     output_directory = os.getenv("OUTPUT_DIRECTORY")
     manager_retry = int(os.getenv("MANAGER_RETRY"))
+    keyfile = os.getenv("KEYFILE")
+
+    # Create the provider
+    # Provider can be openai or gpt4all
+    provider = LLMutils(
+        provider=os.getenv("PROVIDER", "gpt4all"),
+        model_name=os.getenv("MODEL_NAME"),
+        model_type=os.getenv("MODEL_TYPE"),
+        model_path=os.getenv("MODEL_PATH"),
+        allow_download=(os.getenv("ALLOW_DOWNLOAD") == "yes"),
+        keyfile=keyfile
+    )
+        
+    # Create the enterprise
+    enterprise = Enterprise(
+        company_name=company_name,
+        guidelines=guidelines,
+        output_directory=output_directory,
+        manager_retry=manager_retry,
+        interactive=interactive,
+        provider=provider
+    )
 
     # Interactive mode, change variables with user input
     if interactive:
@@ -46,16 +68,6 @@ def main():
             or guidelines
         )
         print(f"\n \U0001F489 \t {guidelines} \n")
-
-    # Create the enterprise
-    enterprise = Enterprise(
-        keyfile=keyfile,
-        company_name=company_name,
-        guidelines=guidelines,
-        output_directory=output_directory,
-        manager_retry=manager_retry,
-        interactive=interactive,
-    )
 
     # Run the enterprise and go into production !
     production = asyncio.run(enterprise.run_enterprise())

@@ -4,9 +4,8 @@ Enterprise
 \U0001F3E2
 """
 import os
-import time
-import openai
 
+from gpt_enterprise.llm_utils import LLMutils
 from gpt_enterprise.team_leader import TeamLeader
 from gpt_enterprise.scrum_master import ScrumMaster
 
@@ -18,10 +17,10 @@ class Enterprise:
 
     def __init__(
         self,
-        keyfile: str,
         guidelines: str,
         output_directory: str,
         manager_retry: int,
+        provider: LLMutils,
         company_name: str = "GPTenterprise",
         interactive: bool = False,
         asynchronous: bool = True,
@@ -40,9 +39,7 @@ class Enterprise:
             interactive (bool): Defaults to False
             asynchronous (bool): Defaults to True
         """
-        # Initialize openai api_key
-        with open(keyfile, "r") as file:
-            openai.api_key = (file.read()).strip()
+        self.provider = provider
         self.company_name = company_name
         self.employees = {}
         self.tasks_board = []
@@ -62,6 +59,7 @@ class Enterprise:
             manager_retry=manager_retry,
             output_directory=output_directory,
             interactive=interactive,
+            provider=self.provider
         )
         # Create the scrum master
         self.scrum_master = ScrumMaster(
@@ -69,6 +67,7 @@ class Enterprise:
             manager_retry=manager_retry,
             output_directory=output_directory,
             interactive=interactive,
+            provider=self.provider
         )
 
     async def run_enterprise(self) -> dict:

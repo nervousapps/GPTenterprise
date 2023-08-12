@@ -10,7 +10,7 @@ import json
 import asyncio
 from typing import List, Dict
 
-from gpt_enterprise.gpt_utils import generate_text
+from gpt_enterprise.llm_utils import LLMutils
 from gpt_enterprise.employee import Employee
 
 
@@ -29,6 +29,7 @@ class ScrumMaster:
         ceo_guidelines: str,
         manager_retry: int,
         output_directory: str,
+        provider: LLMutils,
         interactive: bool = False,
     ):
         """
@@ -49,6 +50,7 @@ class ScrumMaster:
             "r",
         ) as file:
             self.role = file.read()
+        self.provider = provider
         self.ceo_guidelines = ceo_guidelines
         self.manager_retry = manager_retry
         self.output_directory = output_directory
@@ -75,14 +77,13 @@ class ScrumMaster:
                 print(
                     f"\n {self.emoji} Hey, I'm doing plans to achieve your guidelines !\n"
                 )
-                response = generate_text(
+                response = self.provider.generate_text(
                     system_prompt=self.role,
                     user_prompt=f"Here are the CEO guidelines : {self.ceo_guidelines}",
-                    model=os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
-                    temperature=1.0,
+                    temperature=1.0
                 )
                 # Convert to dict
-                task_plan = ast.literal_eval(response.choices[0].message.content)
+                task_plan = ast.literal_eval(response)
                 print(json.dumps(task_plan, indent=4))
                 if self.interactive:
                     if "y" in (
@@ -96,9 +97,8 @@ class ScrumMaster:
                         continue
                 return task_plan
             except Exception as err:
-                print(err)
                 print(
-                    f"\n {self.emoji} I've messed up, retrying to plan tasks... \n Error : \n {response.choices[0].message.content}\n"
+                    f"\n {self.emoji} I've messed up, retrying to plan tasks... \n Error : \n {err}\n"
                 )
         print(f"\n {self.emoji} I've messed up, I'm not able to do this...\n")
         raise err
@@ -115,6 +115,9 @@ class ScrumMaster:
         Returns:
             List[Dict]: Production of the team ! All tasks have the result field
         """
+        if not len(tasks):
+            print("No task to do, great, I can go skateboarding !")
+            exit(1)
         self.tasks = tasks
         print(f"\n {self.emoji} Hey, I'm doing plan, just wait for the result !\n")
         # Do until all tasks have the result field set
@@ -216,19 +219,24 @@ class ScrumMaster:
         """
         if "no" not in str(task.get("requirements", "no")):
             counter = 0
-            while not self.tasks[int(task["requirements"])].get("result"):
+            # Tasks requirements may be a list
+            try:
+                task_req_idx = int(task["requirements"])
+            except Exception as error:
+                task_req_idx_list = list(task["requirements"])
+            while not self.tasks[task_req_idx].get("result"):
                 time.sleep(0.01)
                 counter += 1
                 if counter >= 2000:
                     print(
-                        f"Waiting for {self.tasks[int(task['requirements'])]['employee_name']} to finish..."
+                        f"Waiting for {self.tasks[task_req_idx]['employee_name']} to finish..."
                     )
                     counter = 0
             # Add the previous employee work to the current task to
             # be used by the assigned employee.
             task[
                 "todo"
-            ] += f" Here is the work done by {self.tasks[int(task['requirements'])]['employee_name']} : {self.tasks[int(task['requirements'])]['result']}"
+            ] += f" Here is the work done by {self.tasks[task_req_idx]['employee_name']} : {self.tasks[task_req_idx]['result']}"
 
         print(
             f"{self.emoji} {employee.name} is doing task {task_index} : {task['todo']}"

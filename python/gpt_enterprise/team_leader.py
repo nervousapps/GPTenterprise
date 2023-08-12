@@ -8,7 +8,7 @@ import ast
 import json
 from typing import List, Dict
 
-from gpt_enterprise.gpt_utils import generate_text, EMPLOYEE_PROMPTS_PATH
+from gpt_enterprise.llm_utils import LLMutils, EMPLOYEE_PROMPTS_PATH
 from gpt_enterprise.employee import Employee
 
 
@@ -25,6 +25,7 @@ class TeamLeader:
         ceo_guidelines: str,
         manager_retry: int,
         output_directory: str,
+        provider: LLMutils,
         interactive: bool = False,
     ):
         """
@@ -45,6 +46,7 @@ class TeamLeader:
             "r",
         ) as file:
             self.role = file.read()
+        self.provider = provider
         self.ceo_guidelines = ceo_guidelines
         self.manager_retry = manager_retry
         self.output_directory = output_directory
@@ -65,16 +67,17 @@ class TeamLeader:
                 print(
                     f"\n {self.emoji} Hey, I'm hiring employees to achieve your guidelines !\n"
                 )
-                response = generate_text(
+                response =self.provider.generate_text(
                     system_prompt=self.role,
                     user_prompt=f"Here are the CEO guidelines : {self.ceo_guidelines}",
-                    model=os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
                     temperature=1.0,
                 )
                 # Convert to dict
                 employees_to_hire = ast.literal_eval(
-                    response.choices[0].message.content
+                    response
                 )
+                if not isinstance(employees_to_hire, list):
+                    employees_to_hire = [employees_to_hire]
                 print(json.dumps(employees_to_hire, indent=4))
                 if self.interactive:
                     if "y" in (
@@ -86,27 +89,30 @@ class TeamLeader:
                         break
                     else:
                         continue
+                else:
+                    break
             except Exception as err:
                 print(err)
                 print(
-                    f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {response.choices[0].message.content}\n"
+                    f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {response}\n"
                 )
-                raise err
         print(f"\n Ok, I've hired them ! Please welcome :\n")
         hired_employees = {}
         if employees_to_hire:
-            for employee in employees_to_hire:
-                hired_employees[employee["name"]] = Employee(
-                    role_prompt=employee["role"],
-                    name=employee["name"],
-                    role_name=employee["role_name"],
-                    creativity=float(employee["creativity"]),
-                    emoji=employee["emoji"],
+            for index, employee in enumerate(employees_to_hire):
+                hired_employees[employee.get("name", f"GUY_{index}")] = Employee(
+                    role_prompt=employee.get("role", f"Undefined_{index}"),
+                    name=employee.get("name", f"GUY_{index}"),
+                    role_name=employee.get("role_name", f"Undefined_{index}"),
+                    creativity=float(employee.get("creativity", 1.0)),
+                    emoji=employee.get("emoji", "\U0001F469"),
+                    provider=self.provider
                 )
         # Add a helpful employee for task assigned to a non hired one
         hired_employees["helpful"] = Employee(
             role_filename=os.path.join(EMPLOYEE_PROMPTS_PATH, "helpful_employee.txt"),
             role_name="Helpful employee",
+            provider=self.provider
         )
         return hired_employees
 

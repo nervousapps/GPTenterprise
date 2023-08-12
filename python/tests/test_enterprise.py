@@ -8,7 +8,7 @@ import time
 import pytest
 from typing import Tuple, List
 from gpt_enterprise.enterprise import Enterprise
-from gpt_enterprise.employee import Employee
+from gpt_enterprise.llm_utils import LLMutils
 
 
 from .conftest import EMPLOYEES_FILES_DIR, TASKS_FILES_DIR, mock_open_ai_response_object
@@ -16,13 +16,12 @@ from .conftest import EMPLOYEES_FILES_DIR, TASKS_FILES_DIR, mock_open_ai_respons
 
 def test_enterprise():
     enterprise = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
+        company_name="test",
         guidelines="test",
         output_directory="test",
         manager_retry=1,
-        company_name="test",
+        interactive=False,
+        provider="openai",
     )
 
     assert enterprise.company_name == "test"
@@ -55,7 +54,7 @@ def test_run_enterprise(mocker, employees_path, tasks_path):
     """
 
     def mock_generate_text(
-        system_prompt: str, user_prompt: str, model: str, temperature: float
+        self, system_prompt: str, user_prompt: str, model: str = "gpt-4", temperature: float = None
     ) -> str:
         time.sleep(0.1)  # random.random()*10)
         return mock_open_ai_response_object(mocker=mocker, content="Do something")
@@ -71,38 +70,42 @@ def test_run_enterprise(mocker, employees_path, tasks_path):
         return ("Test", ["img1.jpg"])
 
     # Mock function and method that requests openai API (to avoid costs)
-    mocker.patch("gpt_enterprise.employee.generate_text", mock_generate_text)
-    mocker.patch("gpt_enterprise.employee.generate_image", mock_generate_image)
+    mocker.patch("gpt_enterprise.employee.LLMutils.generate_text", mock_generate_text)
+    mocker.patch("gpt_enterprise.employee.LLMutils.generate_image", mock_generate_image)
 
     # Use a previously generated employees list (to avoid costs)
     def mock_sm_generate_text(
-        system_prompt: str, user_prompt: str, model: str, temperature: float
+         self, system_prompt: str, user_prompt: str, model: str = "gpt-4", temperature: float = None
     ) -> str:
         time.sleep(0.1)  # random.random()*10)
         with open(tasks_path, "r") as file:
             return mock_open_ai_response_object(mocker=mocker, content=file.read())
 
-    mocker.patch("gpt_enterprise.scrum_master.generate_text", mock_sm_generate_text)
+    mocker.patch("gpt_enterprise.scrum_master.LLMutils.generate_text", mock_sm_generate_text)
 
     # Use a previously generated plan_tasks (to avoid costs)
     def mock_tl_generate_text(
-        system_prompt: str, user_prompt: str, model: str, temperature: float
+         self, system_prompt: str, user_prompt: str, model: str = "gpt-4", temperature: float = None
     ) -> str:
         time.sleep(0.1)  # random.random()*10)
         with open(employees_path, "r") as file:
             return mock_open_ai_response_object(mocker=mocker, content=file.read())
 
-    mocker.patch("gpt_enterprise.team_leader.generate_text", mock_tl_generate_text)
+    mocker.patch("gpt_enterprise.team_leader.LLMutils.generate_text", mock_tl_generate_text)
+
+    provider = LLMutils(
+        provider="openai",
+        keyfile=os.path.join(os.path.dirname(__file__), "..", "..", "openai_key.txt.template")
+    )
 
     # Run asynchronously
     enterprise_async = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
         guidelines="test",
         output_directory="test",
-        manager_retry=1,
-        company_name="test",
+        manager_retry=5,
+        provider=provider,
+        company_name="GPTenterprise",
+        interactive=False
     )
 
     start_time = time.time()
@@ -113,14 +116,13 @@ def test_run_enterprise(mocker, employees_path, tasks_path):
 
     # Run sequentially
     enterprise_seq = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
         guidelines="test",
         output_directory="test",
-        manager_retry=1,
-        company_name="test",
-        asynchronous=False,
+        manager_retry=5,
+        provider=provider,
+        company_name="GPTenterprise",
+        interactive=False,
+        asynchronous=False
     )
 
     start_time = time.time()

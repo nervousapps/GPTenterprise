@@ -7,7 +7,7 @@ A task will be defined as the following json object:
     "employee_name": "Must contain only one of given AVAILABLE_EMPLOYEES name (like "GUY", "ROBERT"),
     "todo": "Must be a description of what has to be done. The description must be very detailed and clear. You must put details and examples for the employee to understand what has to be done, and the result he has to produce. Use as much words as you need",
     "type": "Must be "image" if the task is for producing images, or "text" for anything else",
-    "requirements": "A task result may be needed to achieve another task, if so, the requirements field must contain the index (index of a list begins with 0) of the task which result is needed to achieve the current one, else it means that the task can be done in parallel and this field must contain "no". Be careful on requirements to avoid waiting a task that wait for the current one."
+    "requirements": "A task result may be needed to achieve another task, if so, the requirements field must contain only the index (index of a list begins with 0), and only one, of the task which result is needed to achieve the current one, else it means that the task can be done in parallel and this field must contain "no". Be careful on requirements to avoid waiting a task that wait for the current one."
 }
 All fields must be filled.
 For an image task, the todo field must be the subject followed by the situtation wanted in the image like "SUBJECT SITUATION" (for example "Lions photographed").

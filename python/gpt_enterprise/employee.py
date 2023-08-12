@@ -3,10 +3,9 @@
 Employee
 \U0001F469
 """
-import os
 from typing import List, Tuple
 
-from gpt_enterprise.gpt_utils import generate_text, generate_image
+from gpt_enterprise.llm_utils import LLMutils
 
 
 class Employee:
@@ -18,12 +17,12 @@ class Employee:
     def __init__(
         self,
         role_name: str,
+        provider: LLMutils,
         role_filename: str = None,
         role_prompt: str = None,
         name: str = "GUY",
         emoji: str = "\U0001F469",
         creativity: float = 1.0,
-        gpt_version: str = os.getenv("GPT_VERSION", "gpt-3.5-turbo"),  # TODO
     ):
         """
         Give your employee a role file for him to read it and act like you want.
@@ -64,7 +63,7 @@ class Employee:
                 f"\n {self.emoji} Hi, I'm a {self.role_name}, my name is {self.name}.\n"
             )
         self.creativity = creativity
-        self.gpt_version = gpt_version
+        self.provider = provider
 
     def ask_task(self, manager_request: str) -> str:
         """
@@ -78,13 +77,11 @@ class Employee:
         """
         response = ""
         try:
-            response = generate_text(
+            response = self.provider.generate_text(
                 system_prompt=self.role,
                 user_prompt=manager_request,
-                model=self.gpt_version,
                 temperature=self.creativity,
             )
-            response = response.choices[0].message.content
         except Exception as err:
             print(f"\n {self.emoji} {self.name}: {err}\n")
         print(
@@ -116,12 +113,12 @@ class Employee:
         prompt = ""
         image_paths = []
         try:
-            prompt, image_paths = generate_image(
+            prompt, image_paths = self.provider.generate_image(
                 system_prompt=self.role,
                 base_name=base_name,
                 user_prompt=manager_request,
                 output_directory=output_directory,
-                nb_image=nb_image,
+                nb_image=nb_image
             )
         except Exception as err:
             print(f"\n {self.emoji} {self.name}: {err}\n")

@@ -3,7 +3,7 @@ Test gpt utilities
 """
 import time
 import pytest
-from gpt_enterprise.gpt_utils import generate_image, generate_text
+from gpt_enterprise.llm_utils import LLMutils
 
 from .conftest import mock_open_ai_response_object
 
