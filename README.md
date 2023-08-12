@@ -54,6 +54,10 @@ This is basically a python package emulating an enterprise. It requests OpenaAI 
 ## :pinched_fingers: Requirements
 
 - Python 3.9 or newer (needs of [asyncio.to_thread()](https://docs.python.org/3/library/asyncio-task.html#asyncio.to_thread))
+```bash
+python --version
+python3 --version
+```
 
 - [Open API key](https://platform.openai.com/account/api-keys)
 

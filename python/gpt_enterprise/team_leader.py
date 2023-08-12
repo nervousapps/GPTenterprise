@@ -86,12 +86,11 @@ class TeamLeader:
                         break
                     else:
                         continue
+                break
             except Exception as err:
-                print(err)
                 print(
-                    f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {response.choices[0].message.content}\n"
+                    f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {err}\n"
                 )
-                raise err
         print(f"\n Ok, I've hired them ! Please welcome :\n")
         hired_employees = {}
         if employees_to_hire:

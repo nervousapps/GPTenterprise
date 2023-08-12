@@ -10,7 +10,7 @@ from gpt_enterprise.enterprise import Enterprise
 
 
 def main():
-    load_dotenv("./configCustom")  # sys.argv[1])
+    load_dotenv(sys.argv[1])
 
     interactive = os.getenv("INTERACTIVE") == "yes"
     keyfile = os.getenv("KEYFILE")
