@@ -16,9 +16,6 @@ from .conftest import EMPLOYEES_FILES_DIR, TASKS_FILES_DIR, mock_open_ai_respons
 
 def test_enterprise():
     enterprise = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
         guidelines="test",
         output_directory="test",
         manager_retry=1,
@@ -96,9 +93,6 @@ def test_run_enterprise(mocker, employees_path, tasks_path):
 
     # Run asynchronously
     enterprise_async = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
         guidelines="test",
         output_directory="test",
         manager_retry=1,
@@ -113,9 +107,6 @@ def test_run_enterprise(mocker, employees_path, tasks_path):
 
     # Run sequentially
     enterprise_seq = Enterprise(
-        keyfile=os.path.join(
-            os.path.dirname(__file__), "..", "..", "openai_key.txt.template"
-        ),
         guidelines="test",
         output_directory="test",
         manager_retry=1,

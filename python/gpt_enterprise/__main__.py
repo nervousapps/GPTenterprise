@@ -5,6 +5,7 @@ import os
 import sys
 import asyncio
 import json
+import openai
 from dotenv import load_dotenv
 from gpt_enterprise.enterprise import Enterprise
 
@@ -18,6 +19,18 @@ def main():
     guidelines = os.getenv("CEO_GUIDELINES")
     output_directory = os.getenv("OUTPUT_DIRECTORY")
     manager_retry = int(os.getenv("MANAGER_RETRY"))
+    local_ai_url = os.getenv("LOCAL_AI_URL")
+
+    if local_ai_url:
+        # Change api url to LoacalAi one
+        openai.api_base = local_ai_url
+        openai.api_key = "sx-xxx"
+        OPENAI_API_KEY = "sx-xxx"
+        os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
+    else:
+        # Initialize openai api_key
+        with open("./openai_key.txt", "r") as file:
+            openai.api_key = (file.read()).strip()
 
     # Interactive mode, change variables with user input
     if interactive:
@@ -49,7 +62,6 @@ def main():
 
     # Create the enterprise
     enterprise = Enterprise(
-        keyfile=keyfile,
         company_name=company_name,
         guidelines=guidelines,
         output_directory=output_directory,

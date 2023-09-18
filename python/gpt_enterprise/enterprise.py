@@ -4,8 +4,6 @@ Enterprise
 \U0001F3E2
 """
 import os
-import time
-import openai
 
 from gpt_enterprise.team_leader import TeamLeader
 from gpt_enterprise.scrum_master import ScrumMaster
@@ -18,7 +16,6 @@ class Enterprise:
 
     def __init__(
         self,
-        keyfile: str,
         guidelines: str,
         output_directory: str,
         manager_retry: int,
@@ -32,7 +29,6 @@ class Enterprise:
             - a scrum master that wil be responsible of managing tasks
 
         Args:
-            keyfile (str): Pth to openai key file
             guidelines (str): CEO guidelines
             output_directory (str): Output directory
             manager_retry (int): How many times manager will retry to do the plan
@@ -40,9 +36,6 @@ class Enterprise:
             interactive (bool): Defaults to False
             asynchronous (bool): Defaults to True
         """
-        # Initialize openai api_key
-        with open(keyfile, "r") as file:
-            openai.api_key = (file.read()).strip()
         self.company_name = company_name
         self.employees = {}
         self.tasks_board = []

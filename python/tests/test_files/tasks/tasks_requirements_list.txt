@@ -1,0 +1,79 @@
+[
+    {
+        "task_name": "Create Product Ideas",
+        "employee_name": "Alice",
+        "todo": "Propose three different innovative and eco-friendly product ideas that can make users' daily lives easier while reducing waste or energy consumption. Provide sketches or computer designs of the products, as well as the materials and the technology used to build them. The prototypes should be functional and visually appealing.",
+        "type": "image",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Create Product Ideas",
+        "employee_name": "Alice",
+        "todo": "Propose three different innovative and eco-friendly product ideas that can make users' daily lives easier while reducing waste or energy consumption. Provide sketches or computer designs of the products, as well as the materials and the technology used to build them. The prototypes should be functional and visually appealing.",
+        "type": "image",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Create Product Ideas",
+        "employee_name": "Alice",
+        "todo": "Propose three different innovative and eco-friendly product ideas that can make users' daily lives easier while reducing waste or energy consumption. Provide sketches or computer designs of the products, as well as the materials and the technology used to build them. The prototypes should be functional and visually appealing.",
+        "type": "image",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Create Product Ideas",
+        "employee_name": "Alice",
+        "todo": "Propose three different innovative and eco-friendly product ideas that can make users' daily lives easier while reducing waste or energy consumption. Provide sketches or computer designs of the products, as well as the materials and the technology used to build them. The prototypes should be functional and visually appealing.",
+        "type": "image",
+        "requirements": "no"
+    },
+    {
+        "task_name": "Choose Products to Develop",
+        "employee_name": "Charlie",
+        "todo": "Evaluate the product ideas proposed and choose the most promising ones. Provide a detailed report of the reasons behind your choice, including the market potential, the feasibility, and the overall appeal of the products. Also, indicate which employee(s) will be responsible for designing, writing, and creating visualization of the chosen product.",
+        "type": "text",
+        "requirements": 0
+    },
+    {
+        "task_name": "Write Product Descriptions",
+        "employee_name": "Bob",
+        "todo": "Write a description of each chosen product in less than 200 words. The articles should be persuasive, informative and engaging, highlighting the benefits and the eco-friendliness of the product in a concise and clear language. Use SEO keywords effectively. ",
+        "type": "text",
+        "requirements": 1
+    },
+    {
+        "task_name": "Design Product Prototypes",
+        "employee_name": "Alice",
+        "todo": "Design and create prototypes of the chosen products following the eco-friendly and sustainable guidelines. Provide sketches and computer designs of the prototypes. Test them and provide a report of the results, including the improvements and the changes needed. Deliver the prototypes to the development team.",
+        "type": "image",
+        "requirements": "1,2"
+    },
+    {
+        "task_name": "Create Product Images",
+        "employee_name": "Charlie",
+        "todo": "Create vector and 3D images of the prototypes in different sizes and formats. The images should convey the functionality and the eco-friendliness of the products in a visually appealing way, consistent with our branding guidelines. Deliver the images to the marketing team.",
+        "type": "image",
+        "requirements": "[1,2,3]"
+    },
+    {
+        "task_name": "Present Product to CEO",
+        "employee_name": "Bob",
+        "todo": "Present the products to the CEO in a visually appealing and informative way, including the prototypes, the product descriptions, and the product images. Explain the benefits and the market potential of the products, as well as the challenges and the improvements needed. ",
+        "type": "text",
+        "requirements": [1,2,3]
+    },
+    {
+        "task_name": "Create Product Article for Website",
+        "employee_name": "Bob",
+        "todo": "Write an article presenting the chosen products that can be used on the company website. The article should be written for the general audience, highlighting the benefits and the eco-friendliness of the products in less than 500 words. The article should include at least two product images and be SEO-optimized. The article must end with the conclusion that the product create the wanted PRODUCT. ",
+        "type": "text",
+        "requirements": 4
+    },
+    {
+        "task_name": "Write Product Conclusion",
+        "employee_name": "Alice",
+        "todo": "Write a final conclusion of the products submitted that make the wanted PRODUCT. Explain how each product helps at making life easier and greener, and how they complete each other. Tell us why these products are innovative and how they help the planet by being eco-friendly. ",
+        "type": "text",
+        "requirements": 6
+    }
+]

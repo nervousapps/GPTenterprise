@@ -91,6 +91,8 @@ class TeamLeader:
                 print(
                     f"\n {self.emoji} I've messed up, retrying to find employees... \n Error : \n {err}\n"
                 )
+        else:
+            raise err
         print(f"\n Ok, I've hired them ! Please welcome :\n")
         hired_employees = {}
         if employees_to_hire:

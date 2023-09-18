@@ -59,7 +59,7 @@ python --version
 python3 --version
 ```
 
-- [Open API key](https://platform.openai.com/account/api-keys)
+- [Open API key](https://platform.openai.com/account/api-keys), or a [LoacalAI](https://localai.io/) instance, or any other GenAI instance compatible with the openAi python package.
 
 ## :surfing_woman: Installation
 1 - Clone this repository
@@ -179,6 +179,8 @@ An example can be given with the keyword "EXAMPLE:", it will be added to employe
 | CEO_GUIDELINES                 | "As a CEO, I want ... PRODUCT ... "                                         | Default guidelines |
 | INTERACTIVE                    | Wait for user entry (basic for now), no employee interaction if asynchronous mode is activated                                        | "no" |
 | ASYNCHRONOUS                    | Asynchronous mode, employees can work in parallel                                        | "yes" |
+| LOCAL_AI_URL                    | Url of a local instance of an api compatible with openAi python package                                        | "" |
+| MODEL_NAME                    | Model name to use                                        | gpt-3.5-turbo-16k |
 
 ## :roller_coaster: Going further
 - rework managers prompt :curly_loop:

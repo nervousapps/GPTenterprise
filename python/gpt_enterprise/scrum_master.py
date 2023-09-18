@@ -216,19 +216,30 @@ class ScrumMaster:
         """
         if "no" not in str(task.get("requirements", "no")):
             counter = 0
-            while not self.tasks[int(task["requirements"])].get("result"):
-                time.sleep(0.01)
-                counter += 1
-                if counter >= 2000:
-                    print(
-                        f"Waiting for {self.tasks[int(task['requirements'])]['employee_name']} to finish..."
-                    )
-                    counter = 0
-            # Add the previous employee work to the current task to
-            # be used by the assigned employee.
-            task[
-                "todo"
-            ] += f" Here is the work done by {self.tasks[int(task['requirements'])]['employee_name']} : {self.tasks[int(task['requirements'])]['result']}"
+            # Test if requirements is an int or a list
+            try:
+                task_requirements = list(task["requirements"])
+            except TypeError:
+                task_requirements = [int(task["requirements"])]
+            for task_idx in task_requirements:
+                # Test if it is an int, if not continue
+                try:
+                    task_idx = int(task_idx)
+                except Exception as error:
+                    continue
+                while not self.tasks[task_idx].get("result"):
+                    time.sleep(0.01)
+                    counter += 1
+                    if counter >= 2000:
+                        print(
+                            f"Waiting for {self.tasks[int(task['requirements'])]['employee_name']} to finish..."
+                        )
+                        counter = 0
+                # Add the previous employee work to the current task to
+                # be used by the assigned employee.
+                task[
+                    "todo"
+                ] += f" Here is the work done by {self.tasks[task_idx]['employee_name']} : {self.tasks[task_idx]['result']}"
 
         print(
             f"{self.emoji} {employee.name} is doing task {task_index} : {task['todo']}"

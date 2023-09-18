@@ -1,6 +1,7 @@
 # OpenAI stuff
 KEYFILE="./openai_key.txt"
-GPT_VERSION="gpt-3.5-turbo-16k"
+MODEL_NAME="lunademo"
+LOCAL_AI_URL="http://localhost:8080/v1"
 
 # General
 INTERACTIVE="no"

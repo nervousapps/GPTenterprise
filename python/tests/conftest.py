@@ -2,6 +2,7 @@ import os
 import json
 import time
 import pytest
+import openai
 
 from gpt_enterprise.employee import Employee
 from gpt_enterprise.scrum_master import ScrumMaster
@@ -12,6 +13,12 @@ TEST_FILES_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 TASKS_FILES_DIR = os.path.join(TEST_FILES_DIR, "tasks")
 EMPLOYEES_FILES_DIR = os.path.join(TEST_FILES_DIR, "employees")
 
+
+# Change api url to LoacalAi one
+openai.api_base = "local_ai_url"
+openai.api_key = "sx-xxx"
+OPENAI_API_KEY = "sx-xxx"
+os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
 
 @pytest.fixture
 def scrum_master_test():

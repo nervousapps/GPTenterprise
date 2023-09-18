@@ -13,7 +13,7 @@ EMPLOYEE_PROMPTS_PATH = os.path.join(os.path.dirname(__file__), "prompts", "empl
 
 
 def generate_text(
-    system_prompt: str, user_prompt: str, model: str, temperature: float
+    system_prompt: str, user_prompt: str, temperature: float, model: str = os.getenv("MODEL_NAME", "gpt-3.5-turbo-16k")
 ) -> Generator:
     """
 
@@ -68,7 +68,7 @@ def generate_image(
     # Ask ChatGPT a prompt to generate image with DALL-E
     with open(os.path.join(EMPLOYEE_PROMPTS_PATH, "dall_e_prompter.txt"), "r") as file:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=os.getenv("MODEL_NAME", "gpt-3.5-turbo-16k"),
             messages=[
                 # Initialize ChatGPT to be a helpful assistant but that it remains the employee
                 {

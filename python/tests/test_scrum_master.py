@@ -64,16 +64,23 @@ def test_do_plan(mocker, scrum_master_test, fake_employees):
 
 # TODO: add parametrize with test files
 @pytest.mark.asyncio
-async def test_do_plan_async(mocker, scrum_master_test, fake_employees):
+@pytest.mark.parametrize("test_file", [
+    "tasks.txt",
+    "tasks_requirements_list.txt"
+])
+async def test_do_plan_async(mocker, scrum_master_test, fake_employees, test_file):
     # Mock function and method that requests openai API (to avoid costs)
     mocker.patch(
-        "gpt_enterprise.employee.generate_text", return_value="This is only a test"
+        "gpt_enterprise.employee.generate_text",
+        return_value=mock_open_ai_response_object(
+            mocker=mocker, content="This is only a test"
+        ),
     )
     mocker.patch(
         "gpt_enterprise.employee.generate_image",
         return_value=("Do something", ["./img.jpg"]),
     )
-    with open(os.path.join(TASKS_FILES_DIR, "tasks.txt"), "r") as file:
+    with open(os.path.join(TASKS_FILES_DIR, test_file), "r") as file:
         plan = ast.literal_eval(file.read())
 
     production = await scrum_master_test.do_plan_async(plan, fake_employees)
