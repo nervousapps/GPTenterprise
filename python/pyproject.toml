@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "GPTenterprise"
+version = "0.1.0b1"
+authors = [
+    {name = "nervousapps (Achille Pénet)", email = "achille.penet@icloud.com"}
+]
+description = "Emulating an enterprise with OpenaAI GPT."
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
+readme = "README.md"
+dependencies = [
+    "python-dotenv",
+    "openai",
+    "requests",
+]
+requires-python=">= 3.9"
+
+[project.urls]
+Source = "https://github.com/nervousapps/GPTenterprise"
+Documentation = "https://nervousapps.github.io/GPTenterprise"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-mock",
+    "pytest-cov",
+    "pytest-asyncio",
+]
+doc = ["black", "pdoc"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ['gpt_enterprise*']
+exclude = ['tests']
+
+[tool.setuptools.package-data]
+"gpt_enterprise.prompts" = ["*.txt"]
+
+[project.scripts]
+GPTenterprise = "gpt_enterprise:main"
+
+

@@ -1,6 +1,7 @@
 """
 Test manager
 """
+
 import os
 import ast
 import pytest
@@ -64,10 +65,7 @@ def test_do_plan(mocker, scrum_master_test, fake_employees):
 
 # TODO: add parametrize with test files
 @pytest.mark.asyncio
-@pytest.mark.parametrize("test_file", [
-    "tasks.txt",
-    "tasks_requirements_list.txt"
-])
+@pytest.mark.parametrize("test_file", ["tasks.txt", "tasks_requirements_list.txt"])
 async def test_do_plan_async(mocker, scrum_master_test, fake_employees, test_file):
     # Mock function and method that requests openai API (to avoid costs)
     mocker.patch(

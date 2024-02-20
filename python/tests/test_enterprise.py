@@ -1,6 +1,7 @@
 """
 Test enterprise class
 """
+
 import os
 import ast
 import asyncio

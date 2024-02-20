@@ -15,10 +15,9 @@ EMPLOYEES_FILES_DIR = os.path.join(TEST_FILES_DIR, "employees")
 
 
 # Change api url to LoacalAi one
-openai.api_base = "local_ai_url"
+openai.base_url = "local_ai_url"
 openai.api_key = "sx-xxx"
-OPENAI_API_KEY = "sx-xxx"
-os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
+
 
 @pytest.fixture
 def scrum_master_test():

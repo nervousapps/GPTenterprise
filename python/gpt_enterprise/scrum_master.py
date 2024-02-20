@@ -3,6 +3,7 @@
 Scrum Master
 \U0001F3C2
 """
+
 import os
 import ast
 import time
@@ -41,9 +42,11 @@ class ScrumMaster:
         """
         with open(
             os.path.join(
-                MANAGER_PROMPTS_PATH
-                if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
-                else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH"),
+                (
+                    MANAGER_PROMPTS_PATH
+                    if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
+                    else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
+                ),
                 "scrum_master.txt",
             ),
             "r",

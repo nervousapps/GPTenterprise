@@ -1,6 +1,7 @@
 """
 WebGPT is an AI driven enterprise that develop website for its clients.
 """
+
 import os
 import openai
 from gpt_enterprise.gpt_utils import (

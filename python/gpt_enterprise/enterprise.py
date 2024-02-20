@@ -3,6 +3,7 @@
 Enterprise
 \U0001F3E2
 """
+
 import os
 
 from gpt_enterprise.team_leader import TeamLeader

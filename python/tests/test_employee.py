@@ -1,6 +1,7 @@
 """
 Test cases for the employee module
 """
+
 import os
 import pytest
 from gpt_enterprise.employee import Employee

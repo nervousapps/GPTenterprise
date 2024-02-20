@@ -1,6 +1,7 @@
 """
 GPTenterprise is an AI driven enterprise.
 """
+
 import os
 import sys
 import asyncio
@@ -23,10 +24,8 @@ def main():
 
     if local_ai_url:
         # Change api url to LoacalAi one
-        openai.api_base = local_ai_url
+        openai.base_url = local_ai_url
         openai.api_key = "sx-xxx"
-        OPENAI_API_KEY = "sx-xxx"
-        os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
     else:
         # Initialize openai api_key
         with open("./openai_key.txt", "r") as file:

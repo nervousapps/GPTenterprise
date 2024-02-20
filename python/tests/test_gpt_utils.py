@@ -1,6 +1,7 @@
 """
 Test gpt utilities
 """
+
 import time
 import pytest
 from gpt_enterprise.gpt_utils import generate_image, generate_text
@@ -18,7 +19,7 @@ def test_generate_text(mocker):
         return mock_open_ai_response_object(mocker=mocker, content="Do something")
 
     mocker.patch(
-        "gpt_enterprise.gpt_utils.openai.ChatCompletion.create", mock_generate_text
+        "gpt_enterprise.gpt_utils.openai.chat.completions.create", mock_generate_text
     )
     response = generate_text(
         system_prompt="test", user_prompt="test", model="test", temperature=1.0
@@ -36,7 +37,7 @@ def test_generate_image(mocker):
         return mock_open_ai_response_object(mocker=mocker, content="Do something")
 
     mocker.patch(
-        "gpt_enterprise.gpt_utils.openai.ChatCompletion.create", mock_generate_text
+        "gpt_enterprise.gpt_utils.openai.chat.completions.create", mock_generate_text
     )
     mocker.patch(
         "gpt_enterprise.gpt_utils.openai.Image.create", return_value={"data": []}

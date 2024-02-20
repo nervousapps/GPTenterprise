@@ -1,7 +1,7 @@
 # OpenAI stuff
 KEYFILE="./openai_key.txt"
 MODEL_NAME="lunademo"
-LOCAL_AI_URL="http://localhost:8080/v1"
+LOCAL_AI_URL=http://172.29.221.52:5000/v1/
 
 # General
 INTERACTIVE="no"

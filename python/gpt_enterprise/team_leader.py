@@ -3,6 +3,7 @@
 Team leader
 \U0001F57A
 """
+
 import os
 import ast
 import json
@@ -37,9 +38,11 @@ class TeamLeader:
         """
         with open(
             os.path.join(
-                MANAGER_PROMPTS_PATH
-                if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
-                else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH"),
+                (
+                    MANAGER_PROMPTS_PATH
+                    if not os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
+                    else os.getenv("CUSTOM_MANAGER_PROMPTS_PATH")
+                ),
                 "team_leader.txt",
             ),
             "r",
